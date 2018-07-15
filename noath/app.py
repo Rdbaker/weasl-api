@@ -10,8 +10,7 @@ from noath.errors import APIException
 from noath.extensions import db, migrate
 from noath.settings import ProdConfig
 from noath.user.models import EmailToken, SMSToken, User
-from noath.task.models import Task
-from noath.skill.models import Category, Skill
+from noath.org.models import Org
 
 
 def create_app(config_object=ProdConfig):
@@ -48,11 +47,9 @@ def register_blueprints(app):
     """Register Flask blueprints."""
     from noath.api.auth import blueprint as auth_blueprint
     from noath.api.users import blueprint as users_blueprint
-    from noath.api.tasks import blueprint as tasks_blueprint
 
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(users_blueprint)
-    app.register_blueprint(tasks_blueprint)
     return None
 
 
@@ -96,4 +93,3 @@ def register_commands(app):
     app.cli.add_command(commands.lint)
     app.cli.add_command(commands.clean)
     app.cli.add_command(commands.urls)
-    app.cli.add_command(commands.seed_db)

@@ -9,8 +9,6 @@ from flask import current_app
 from flask.cli import with_appcontext
 from werkzeug.exceptions import MethodNotAllowed, NotFound
 
-from noath.skill.models import Category
-
 HERE = os.path.abspath(os.path.dirname(__file__))
 PROJECT_ROOT = os.path.join(HERE, os.pardir)
 TEST_PATH = os.path.join(PROJECT_ROOT, 'tests')
@@ -126,15 +124,3 @@ def urls(url, order):
 
     for row in rows:
         click.echo(str_template.format(*row[:column_length]))
-
-
-@click.command()
-@with_appcontext
-def seed_db():
-    """Seed the database with initial data."""
-    from noath.seeds import categories
-
-    for category in categories:
-        maybe_category = Category.query.filter(Category.title == category['title']).first()
-        if maybe_category is None:
-            Category.create(**category)

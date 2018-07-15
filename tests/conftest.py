@@ -7,7 +7,7 @@ from noath.app import create_app
 from noath.database import db as _db
 from noath.settings import TestConfig
 
-from .factories import UserFactory
+from .factories import UserFactory, OrgFactory
 
 
 @pytest.yield_fixture(scope='function')
@@ -43,8 +43,16 @@ def db(app):
 
 
 @pytest.fixture
-def user(db):
+def org(db):
+    """An org factory for the tests."""
+    org = OrgFactory()
+    db.session.commit()
+    return org
+
+
+@pytest.fixture
+def user(db, org):
     """A user for the tests."""
-    user = UserFactory()
+    user = UserFactory(org_id=org.id)
     db.session.commit()
     return user

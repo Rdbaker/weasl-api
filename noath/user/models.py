@@ -18,7 +18,7 @@ from noath.errors import Unauthorized
 class EmailToken(Model):
     """A class for an email token."""
 
-    __tablename__ = 'email_auth_token'
+    __tablename__ = 'users_email_auth_token'
 
     token = Column(UUID(as_uuid=True), nullable=False, primary_key=True)
     user_id = reference_col('users', primary_key=True)
@@ -88,7 +88,7 @@ class EmailToken(Model):
 class SMSToken(Model):
     """A class for SMS authentication tokens."""
 
-    __tablename__ = 'sms_auth_token'
+    __tablename__ = 'users_sms_auth_token'
 
     TOKEN_CHARACTERS = '0123456789abcdefghijklmonpqrstuvwxyz'
 
@@ -155,6 +155,7 @@ class User(UUIDModel):
     is_admin = Column(db.Boolean, default=False)
     email = Column(db.String(90), index=True, nullable=True, unique=True)
     phone_number = Column(db.String(50), index=True, nullable=True, unique=True)
+    org_id = reference_col('orgs', nullable=False)
 
     @classmethod
     def from_token(cls, token: str):

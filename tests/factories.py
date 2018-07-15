@@ -7,6 +7,7 @@ from factory.alchemy import SQLAlchemyModelFactory
 
 from noath.database import db
 from noath.user.models import User
+from noath.org.models import Org
 
 
 class BaseFactory(SQLAlchemyModelFactory):
@@ -29,3 +30,11 @@ class UserFactory(BaseFactory):
         """Factory configuration."""
 
         model = User
+
+class OrgFactory(BaseFactory):
+    """Org factory."""
+
+    class Meta:
+        """Factory configuration."""
+
+        model = Org

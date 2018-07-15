@@ -6,6 +6,7 @@ from flask import Blueprint, jsonify, request
 from noath.constants import Errors
 from noath.errors import BadRequest, Unauthorized
 from noath.user.models import EmailToken, SMSToken, User
+from noath.org.models import Org
 
 blueprint = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -33,7 +34,8 @@ def send_to_sms():
     user = User.query.filter(User.phone_number == phone_number).first()
     if user is None:
         # create a new user
-        user = User.create(phone_number=phone_number)
+        org = Org.create()
+        user = User.create(phone_number=phone_number, org_id=org.id)
     # create an SMS token and send it
     token = SMSToken.generate(user)
     token.send()
@@ -67,7 +69,8 @@ def send_to_email():
     user = User.query.filter(User.email == email).first()
     if user is None:
         # create a new user
-        user = User.create(email=email)
+        org = Org.create()
+        user = User.create(email=email, org_id=org.id)
     # create an email token and send it
     token = EmailToken.generate(user)
     token.send()

@@ -1,0 +1,4 @@
+secrets.sh
+.vscode
+*.py[cod]
+.pytest_cache

@@ -1,11 +1,13 @@
 """API routes for end users."""
 
 from flask import Blueprint, jsonify, request, g
+from sqlalchemy.exc import IntegrityError
 
+from noath.errors import BadRequest
 from noath.end_user.models import SMSToken, EndUser
 from noath.end_user.schema import EndUserSchema
 from noath.utils import api_key_required, end_user_login_required
-from noath.constants import Success
+from noath.constants import Success, Errors
 
 blueprint = Blueprint('end_users', __name__, url_prefix='/end_users')
 
@@ -22,10 +24,16 @@ def get_me():
 @api_key_required
 def create_end_user():
     """Create an end user for the org."""
-    end_user_data = END_USER_SCHEMA.load(request.json).data
+    end_user_data = END_USER_SCHEMA.load(request.json)
     end_user_data['org_id'] = g.current_org.id
-    end_user = EndUser.create(**end_user_data)
-    return jsonify(data=END_USER_SCHEMA.dump(end_user).data,
+    try:
+        end_user = EndUser.create(**end_user_data)
+    except IntegrityError as e:
+        if 'email' in str(e):
+            raise BadRequest(Errors.END_USER_DUPLICATE_EMAIL)
+        else:
+            raise BadRequest(Errors.END_USER_DUPLICATE_PHONE)
+    return jsonify(data=END_USER_SCHEMA.dump(end_user),
                    message=Success.END_USER_CREATED), 201
 
 # TODO

@@ -31,5 +31,5 @@ class Org(IDModel):
     @classmethod
     def from_api_key(cls, maybe_key):
         """Get the org from the API key."""
-        org = org.query.filter(Org.api_key == maybe_key).first()
+        org = Org.query.filter(Org.api_key == maybe_key).first()
         return org

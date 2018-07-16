@@ -5,6 +5,7 @@ from noath.constants import Errors
 from noath.errors import Unauthorized
 from noath.user.models import User
 from noath.end_user.models import EndUser
+from noath.org.models import Org
 
 
 def login_required(f):
@@ -42,7 +43,7 @@ def end_user_login_required(f):
 def api_key_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        auth_header = requrest.headers.get('Authorization')
+        auth_header = request.headers.get('Authorization')
         if not auth_header:
             raise Unauthorized(Errors.API_KEY_REQUIRED)
         api_key = auth_header[7:]

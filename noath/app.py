@@ -48,9 +48,13 @@ def register_blueprints(app):
     """Register Flask blueprints."""
     from noath.api.auth import blueprint as auth_blueprint
     from noath.api.users import blueprint as users_blueprint
+    from noath.api.orgs import blueprint as orgs_blueprint
+    from noath.api.end_users import blueprint as end_users_blueprint
 
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(users_blueprint)
+    app.register_blueprint(orgs_blueprint)
+    app.register_blueprint(end_users_blueprint)
     return None
 
 
@@ -59,7 +63,7 @@ def register_errorhandlers(app):
     @app.errorhandler(ValidationError)
     def handle_marshmallow_validation_error(ex):
         response = jsonify(error_code="data-validation-error",
-                           error_message=ex.messages)
+                           error_message=ex.messages.get(('_schema')))
         response.status_code = 422
         return response
 

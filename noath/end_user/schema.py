@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """User schema."""
-from marshmallow import Schema, fields, ValidationError, validate
+from marshmallow import Schema, fields, ValidationError, validates_schema
+
+from noath.constants import Errors
 
 
 class EndUserSchema(Schema):
@@ -19,9 +21,9 @@ class EndUserSchema(Schema):
         type_ = 'end_user'
         strict = True
 
-    @validate
+    @validates_schema
     def validate_end_user(self, data):
         """Validate the end_user."""
         # TODO: more validation
-        if data['email'] is None and data['phone_number'] is None:
+        if data.get('email') is None and data.get('phone_number') is None:
             raise ValidationError(Errors.END_USER_MISSING_IDENTIFIER[1])

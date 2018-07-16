@@ -11,3 +11,10 @@ class Errors(object):
     PHONE_REQUIRED = ('phone-number-required', 'Phone number is required')
     EMAIL_REQUIRED = ('email-required', 'Email is required')
     LOGIN_REQUIRED = ('login-required', 'Login required for that')
+    API_KEY_REQUIRED = ('api-key-required', 'An API key is required for that')
+    END_USER_MISSING_IDENTIFIER = ('missing-identifier', 'Email or phone number required to create a user.')
+
+class Success(object):
+    """Constants for success in the form of: (code, message)."""
+
+    END_USER_CREATED = ('end-user-created', 'End user was created successfully')

@@ -27,3 +27,9 @@ class Org(IDModel):
     __tablename__ = 'orgs'
 
     api_key = Column(db.String(255), default=lambda _: uuid.uuid4().hex, index=True)
+
+    @classmethod
+    def from_api_key(cls, maybe_key):
+        """Get the org from the API key."""
+        org = org.query.filter(Org.api_key == maybe_key).first()
+        return org

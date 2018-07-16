@@ -22,7 +22,7 @@ class EmailToken(Model):
 
     token = Column(UUID(as_uuid=True), nullable=False, primary_key=True)
     end_user_id = reference_col('end_users', primary_key=True)
-    end_user = relationship('User')
+    end_user = relationship('EndUser')
     created_at = Column(db.DateTime(timezone=True), nullable=False,
                         default=dt.datetime.utcnow)
     expired_at = Column(db.DateTime(timezone=True), nullable=False,
@@ -153,9 +153,14 @@ class EndUser(UUIDModel):
     __tablename__ = 'end_users'
 
     attributes = Column(JSONB())
-    email = Column(db.String(90), index=True, nullable=True, unique=True)
-    phone_number = Column(db.String(50), index=True, nullable=True, unique=True)
-    org_id = reference_col('orgs', nullable=False)
+    email = Column(db.String(90), index=True, nullable=True)
+    phone_number = Column(db.String(50), index=True, nullable=True)
+    org_id = reference_col('orgs', nullable=False, index=True)
+
+    __table_args__ = (
+        UniqueConstraint('org_id', 'email', name='_email_org_uc'),
+        UniqueConstraint('org_id', 'phone_number', name='_phone_org_uc'),
+    )
 
     @classmethod
     def from_token(cls, token: str):

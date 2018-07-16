@@ -15,9 +15,9 @@ from noath.database import (Column, Model, db, reference_col,
 from noath.errors import Unauthorized
 
 class OrgProperty():
-    org_id = reference_col('orgs')
-    property_name = Column(db.String(255), index=True, nullable=False)
-    property_value = Column(db.String(255), index=True, nullable=False)
+    org_id = reference_col('orgs', primary_key=True)
+    property_name = Column(db.String(255), primary_key=True)
+    property_value = Column(db.String(255))
     property_type = Column(db.String(90), nullable=False)
 
 
@@ -26,4 +26,4 @@ class Org(IDModel):
 
     __tablename__ = 'orgs'
 
-    api_key = Column(db.String(255), default=lambda _: uuid.uuid4().hex)
+    api_key = Column(db.String(255), default=lambda _: uuid.uuid4().hex, index=True)

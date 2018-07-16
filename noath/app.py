@@ -11,6 +11,7 @@ from noath.extensions import db, migrate
 from noath.settings import ProdConfig
 from noath.user.models import EmailToken, SMSToken, User
 from noath.org.models import Org
+from noath.end_user.models import EndUser
 
 
 def create_app(config_object=ProdConfig):

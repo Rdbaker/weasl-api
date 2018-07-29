@@ -1,5 +1,5 @@
-from flask import g, request
-from functools import wraps
+from flask import g, request, make_response, current_app
+from functools import wraps, update_wrapper
 
 from noath.constants import Errors
 from noath.errors import Unauthorized
@@ -40,16 +40,15 @@ def end_user_login_required(f):
     return decorated_function
 
 
-def api_key_required(f):
+def client_id_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        auth_header = request.headers.get('Authorization')
+        auth_header = request.headers.get('X-Noath-Client-Id')
         if not auth_header:
-            raise Unauthorized(Errors.API_KEY_REQUIRED)
-        api_key = auth_header[7:]
-        org = Org.from_api_key(api_key)
+            raise Unauthorized(Errors.CLIENT_ID_REQUIRED)
+        org = Org.from_client_id(auth_header)
         if not org:
-            raise Unauthorized(Errors.INVALID_API_KEY)
+            raise Unauthorized(Errors.INVALID_CLIENT_ID)
 
         g.current_org = org
         return f(*args, **kwargs)

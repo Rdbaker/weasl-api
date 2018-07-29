@@ -34,7 +34,7 @@ def send_to_sms():
     user = User.query.filter(User.phone_number == phone_number).first()
     if user is None:
         # create a new user
-        org = Org.create()
+        org = Org.generate_new()
         user = User.create(phone_number=phone_number, org_id=org.id)
     # create an SMS token and send it
     token = SMSToken.generate(user)
@@ -69,7 +69,7 @@ def send_to_email():
     user = User.query.filter(User.email == email).first()
     if user is None:
         # create a new user
-        org = Org.create()
+        org = Org.generate_new()
         user = User.create(email=email, org_id=org.id)
     # create an email token and send it
     token = EmailToken.generate(user)

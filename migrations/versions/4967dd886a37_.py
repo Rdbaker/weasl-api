@@ -1,4 +1,4 @@
-"""empty message
+"""Adds users and tokens
 
 Revision ID: 4967dd886a37
 Revises: 

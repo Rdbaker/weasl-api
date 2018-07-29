@@ -40,7 +40,7 @@ def register_extensions(app):
     """Register Flask extensions."""
     db.init_app(app)
     migrate.init_app(app, db)
-    CORS(app, origins=[r'.*\.noath\.org:9000', 'app.noath.org'])
+    CORS(app)
     return None
 
 

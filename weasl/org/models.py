@@ -10,10 +10,10 @@ from flask import current_app
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.schema import UniqueConstraint
 
-from noath.constants import Errors
-from noath.database import (Column, Model, db, reference_col,
+from weasl.constants import Errors
+from weasl.database import (Column, Model, db, reference_col,
                             IDModel, relationship)
-from noath.errors import Unauthorized
+from weasl.errors import Unauthorized
 
 class OrgPropertyNamespaces(enum.Enum):
     NONE = '*'

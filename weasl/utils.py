@@ -1,11 +1,11 @@
 from flask import g, request, make_response, current_app
 from functools import wraps, update_wrapper
 
-from noath.constants import Errors
-from noath.errors import Unauthorized
-from noath.user.models import User
-from noath.end_user.models import EndUser
-from noath.org.models import Org
+from weasl.constants import Errors
+from weasl.errors import Unauthorized
+from weasl.user.models import User
+from weasl.end_user.models import EndUser
+from weasl.org.models import Org
 
 
 def login_required(f):
@@ -43,7 +43,7 @@ def end_user_login_required(f):
 def client_id_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        auth_header = request.headers.get('X-Noath-Client-Id')
+        auth_header = request.headers.get('X-Weasl-Client-Id')
         if not auth_header:
             raise Unauthorized(Errors.CLIENT_ID_REQUIRED)
         org = Org.from_client_id(auth_header)

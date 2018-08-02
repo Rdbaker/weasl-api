@@ -9,10 +9,10 @@ from flask import current_app
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.schema import UniqueConstraint
 
-from noath.constants import Errors
-from noath.database import (Column, Model, UUIDModel, db, reference_col,
+from weasl.constants import Errors
+from weasl.database import (Column, Model, UUIDModel, db, reference_col,
                              relationship)
-from noath.errors import Unauthorized
+from weasl.errors import Unauthorized
 
 
 class EmailToken(Model):
@@ -71,11 +71,11 @@ class EmailToken(Model):
                 },
                 Message={
                     'Subject': {
-                        'Data': 'Log in to your Noath account'
+                        'Data': 'Log in to your Weasl account'
                     },
                     'Body': {
                         'Html': {
-                            'Data': 'Here is your link to log into Noath: {}/auth/email/verify?token_string={}'.format(current_app.config.get('BASE_API_HOST'), self.token)
+                            'Data': 'Here is your link to log into Weasl: {}/auth/email/verify?token_string={}'.format(current_app.config.get('BASE_API_HOST'), self.token)
                         }
                     }
                 }
@@ -142,7 +142,7 @@ class SMSToken(Model):
             current_app.twilio_client.messages.create(
                 to=phone_number,
                 from_=current_app.config['TWILIO_FROM_NUMBER'],
-                body='Use this code to login to Noath: {}'.format(self.token)
+                body='Use this code to login to Weasl: {}'.format(self.token)
             )
         self.update(sent=True)
 

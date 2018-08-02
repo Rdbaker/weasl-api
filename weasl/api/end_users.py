@@ -3,11 +3,11 @@
 from flask import Blueprint, jsonify, request, g, Response
 from sqlalchemy.exc import IntegrityError
 
-from noath.errors import BadRequest, Unauthorized
-from noath.end_user.models import SMSToken, EndUser
-from noath.end_user.schema import EndUserSchema
-from noath.utils import client_id_required, end_user_login_required
-from noath.constants import Success, Errors
+from weasl.errors import BadRequest, Unauthorized
+from weasl.end_user.models import SMSToken, EndUser
+from weasl.end_user.schema import EndUserSchema
+from weasl.utils import client_id_required, end_user_login_required
+from weasl.constants import Success, Errors
 
 blueprint = Blueprint('end_users', __name__, url_prefix='/end_users')
 

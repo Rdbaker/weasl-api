@@ -2,7 +2,7 @@
 """Test the views at /auth/email."""
 import pytest
 
-from noath.user.models import SMSToken, User
+from weasl.user.models import SMSToken, User
 
 
 @pytest.mark.usefixtures('db')

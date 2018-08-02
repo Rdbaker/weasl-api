@@ -4,7 +4,7 @@ import uuid
 
 import pytest
 
-from noath.user.models import EmailToken, User
+from weasl.user.models import EmailToken, User
 
 
 @pytest.mark.usefixtures('db')
@@ -27,7 +27,7 @@ class TestSendEmail(object):
         """Test that we create a new user if it's a new email."""
         old_count = User.query.count()
         func = getattr(testapp, method)
-        func(self.base_url, {'email': 'test-email@noath.org'})
+        func(self.base_url, {'email': 'test-email@weasl.org'})
         assert old_count + 1 == User.query.count()
 
     @pytest.mark.parametrize('method', methods)

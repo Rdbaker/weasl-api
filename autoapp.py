@@ -2,8 +2,8 @@
 """Create an application instance."""
 from flask.helpers import get_debug_flag
 
-from noath.app import create_app
-from noath.settings import DevConfig, ProdConfig
+from weasl.app import create_app
+from weasl.settings import DevConfig, ProdConfig
 
 CONFIG = DevConfig if get_debug_flag() else ProdConfig
 

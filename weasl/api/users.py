@@ -2,9 +2,9 @@
 
 from flask import Blueprint, jsonify, request, g
 
-from noath.user.models import SMSToken, User
-from noath.user.schema import UserSchema
-from noath.utils import login_required
+from weasl.user.models import SMSToken, User
+from weasl.user.schema import UserSchema
+from weasl.utils import login_required
 
 blueprint = Blueprint('users', __name__, url_prefix='/users')
 

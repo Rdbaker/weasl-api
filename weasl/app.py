@@ -5,13 +5,13 @@ from flask_cors import CORS
 from marshmallow.exceptions import ValidationError
 from twilio.rest import Client
 
-from noath import commands
-from noath.errors import APIException
-from noath.extensions import db, migrate
-from noath.settings import ProdConfig
-from noath.user.models import EmailToken, SMSToken, User
-from noath.org.models import Org
-from noath.end_user.models import EndUser
+from weasl import commands
+from weasl.errors import APIException
+from weasl.extensions import db, migrate
+from weasl.settings import ProdConfig
+from weasl.user.models import EmailToken, SMSToken, User
+from weasl.org.models import Org
+from weasl.end_user.models import EndUser
 
 
 def create_app(config_object=ProdConfig):
@@ -46,10 +46,10 @@ def register_extensions(app):
 
 def register_blueprints(app):
     """Register Flask blueprints."""
-    from noath.api.auth import blueprint as auth_blueprint
-    from noath.api.users import blueprint as users_blueprint
-    from noath.api.orgs import blueprint as orgs_blueprint
-    from noath.api.end_users import blueprint as end_users_blueprint
+    from weasl.api.auth import blueprint as auth_blueprint
+    from weasl.api.users import blueprint as users_blueprint
+    from weasl.api.orgs import blueprint as orgs_blueprint
+    from weasl.api.end_users import blueprint as end_users_blueprint
 
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(users_blueprint)

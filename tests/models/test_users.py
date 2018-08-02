@@ -1,6 +1,6 @@
 import pytest
 
-from noath.user.models import User
+from weasl.user.models import User
 
 
 @pytest.mark.usefixtures('db')

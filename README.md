@@ -1,4 +1,4 @@
-# Noath API
+# Weasl API
 
 ## Setup
 
@@ -13,6 +13,7 @@
 pip install -r requirements/dev.txt
 . env.sh
 . secrets.sh
+. setup_db.sh
 flask db upgrade
 ```
 

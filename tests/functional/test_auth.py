@@ -4,7 +4,7 @@ import uuid
 
 import pytest
 
-from noath.user.models import EmailToken, SMSToken, User
+from weasl.user.models import EmailToken, SMSToken, User
 
 
 @pytest.mark.usefixtures('db')
@@ -19,7 +19,7 @@ class TestLoginWithEmail(object):
         """Test that we can login without having an account"""
         func = getattr(testapp, method)
         # user sends email to /auth/email/send
-        user_email = 'test@noath.org'
+        user_email = 'test@weasl.org'
         send_res = func(self.base_url.format('send'), {'email': user_email})
         assert send_res.status_code == 200
 

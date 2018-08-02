@@ -2,7 +2,7 @@
 """User schema."""
 from marshmallow import Schema, fields, ValidationError, validates_schema
 
-from noath.constants import Errors
+from weasl.constants import Errors
 
 
 class EndUserSchema(Schema):

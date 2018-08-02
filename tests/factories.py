@@ -5,9 +5,9 @@ import random
 from factory import Sequence
 from factory.alchemy import SQLAlchemyModelFactory
 
-from noath.database import db
-from noath.user.models import User
-from noath.org.models import Org
+from weasl.database import db
+from weasl.user.models import User
+from weasl.org.models import Org
 
 
 class BaseFactory(SQLAlchemyModelFactory):

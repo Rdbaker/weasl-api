@@ -22,7 +22,7 @@ class Config(object):
     TWILIO_FROM_NUMBER = os.environ.get('TWILIO_FROM_NUMBER')
 
     # email stuff
-    FROM_EMAIL = os.environ.get('FROM_EMAIL', 'noreply@noath.org')
+    FROM_EMAIL = os.environ.get('FROM_EMAIL', 'noreply@weasl.org')
 
 
 class ProdConfig(Config):
@@ -31,7 +31,7 @@ class ProdConfig(Config):
     ENV = 'prod'
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
-    BASE_API_HOST = 'https://api.noath.org'
+    BASE_API_HOST = 'https://api.weasl.org'
 
 
 class DevConfig(Config):
@@ -39,8 +39,8 @@ class DevConfig(Config):
 
     ENV = 'dev'
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'postgres://noath:noath123@' + \
-        'localhost:5432/noath'
+    SQLALCHEMY_DATABASE_URI = 'postgres://weasl:weasl123@' + \
+        'localhost:5432/weasl'
 
 
 class TestConfig(Config):
@@ -50,5 +50,5 @@ class TestConfig(Config):
     DEBUG = True
     SEND_EMAILS = False
     SEND_SMS = False
-    SQLALCHEMY_DATABASE_URI = 'postgres://noath:noath123@' + \
-        'localhost:5432/noath_test'
+    SQLALCHEMY_DATABASE_URI = 'postgres://weasl:weasl123@' + \
+        'localhost:5432/weasl_test'

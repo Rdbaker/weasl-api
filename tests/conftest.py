@@ -3,9 +3,9 @@
 import pytest
 from webtest import TestApp
 
-from noath.app import create_app
-from noath.database import db as _db
-from noath.settings import TestConfig
+from weasl.app import create_app
+from weasl.database import db as _db
+from weasl.settings import TestConfig
 
 from .factories import UserFactory, OrgFactory
 

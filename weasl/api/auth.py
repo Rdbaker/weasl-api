@@ -3,10 +3,10 @@ import uuid
 
 from flask import Blueprint, jsonify, request
 
-from noath.constants import Errors
-from noath.errors import BadRequest, Unauthorized
-from noath.user.models import EmailToken, SMSToken, User
-from noath.org.models import Org
+from weasl.constants import Errors
+from weasl.errors import BadRequest, Unauthorized
+from weasl.user.models import EmailToken, SMSToken, User
+from weasl.org.models import Org
 
 blueprint = Blueprint('auth', __name__, url_prefix='/auth')
 

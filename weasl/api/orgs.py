@@ -2,9 +2,9 @@
 
 from flask import Blueprint, jsonify, request, g
 
-from noath.org.models import Org
-from noath.org.schema import OrgSchema
-from noath.utils import login_required
+from weasl.org.models import Org
+from weasl.org.schema import OrgSchema
+from weasl.utils import login_required
 
 blueprint = Blueprint('orgs', __name__, url_prefix='/orgs')
 

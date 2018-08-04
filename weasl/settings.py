@@ -7,7 +7,7 @@ class Config(object):
     """Base configuration."""
 
     TESTING = False
-    SECRET_KEY = os.environ.get('NOATH_SECRET', 'secret-key')
+    SECRET_KEY = os.environ.get('WEASL_SECRET', 'secret-key')
     APP_DIR = os.path.abspath(os.path.dirname(__file__))  # This directory
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -22,7 +22,7 @@ class Config(object):
     TWILIO_FROM_NUMBER = os.environ.get('TWILIO_FROM_NUMBER')
 
     # email stuff
-    FROM_EMAIL = os.environ.get('FROM_EMAIL', 'noreply@weasl.org')
+    FROM_EMAIL = os.environ.get('FROM_EMAIL', 'noreply@weasl.in')
 
 
 class ProdConfig(Config):
@@ -31,7 +31,7 @@ class ProdConfig(Config):
     ENV = 'prod'
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
-    BASE_API_HOST = 'https://api.weasl.org'
+    BASE_API_HOST = 'https://api.weasl.in'
 
 
 class DevConfig(Config):

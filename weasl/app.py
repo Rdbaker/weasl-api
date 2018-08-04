@@ -3,6 +3,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 from marshmallow.exceptions import ValidationError
+from flask_sslify import SSLify
 from twilio.rest import Client
 
 from weasl import commands
@@ -38,9 +39,12 @@ def create_app(config_object=ProdConfig):
 
 def register_extensions(app):
     """Register Flask extensions."""
+    if 'DYNO' in os.environ:
+        SSLify(app)
+
     db.init_app(app)
     migrate.init_app(app, db)
-    CORS(app)
+    CORS(app, resources={r"/end_users/*": {"origins": "js.weasl.in"}})
     return None
 
 

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 """The app module, containing the app factory function."""
+import os
+
 from flask import Flask, jsonify
 from flask_cors import CORS
 from marshmallow.exceptions import ValidationError

@@ -22,12 +22,28 @@ class OrgPropertyNamespaces(enum.Enum):
     SETTINGS = 'settings'
 
 
-class OrgProperty():
+class OrgPropertyTypes(enum.Enum):
+    STRING = 'str'
+    NUMBER = 'int'
+    JSON = 'json.loads'
+    BOOLEAN = 'bool'
+
+
+class OrgProperty(Model):
+    """A class for org properties in the database."""
+
+    __tablename__ = 'org_properties'
+
     org_id = reference_col('orgs', primary_key=True)
-    property_name = Column(db.String(255), primary_key=True)
-    property_value = Column(db.String(255))
-    property_type = Column(db.String(90), nullable=False)
+    property_name = Column(db.String(511), primary_key=True)
+    property_value = Column(db.Text())
+    property_type = Column(db.Enum(OrgPropertyTypes), nullable=False)
     property_namespace = Column(db.Enum(OrgPropertyNamespaces))
+
+    @classmethod
+    def get_by_org(cls, org_id):
+        """Get all the properties for the org."""
+        return cls.query.filter(cls.org_id == org_id).all()
 
 
 class Org(IDModel):
@@ -35,8 +51,8 @@ class Org(IDModel):
 
     __tablename__ = 'orgs'
 
-    client_id = Column(db.String(255), default=lambda _: uuid.uuid4().hex[:10], index=True, unique=True)
-    client_secret = Column(db.String(255), default=lambda _: uuid.uuid4().hex, index=True, unique=True)
+    client_id = Column(db.String(255), default=lambda _: uuid.uuid4().hex[:10], index=True, unique=True, nullable=False)
+    client_secret = Column(db.String(255), default=lambda _: uuid.uuid4().hex, index=True, unique=True, nullable=False)
 
     @classmethod
     def generate_new(cls):
@@ -58,6 +74,11 @@ class Org(IDModel):
         """Get the org from the client ID."""
         org = Org.query.filter(Org.client_id == maybe_id).first()
         return org
+
+    @property
+    def properties(self):
+        """Get all the properties for the org."""
+        return OrgProperty.get_by_org(self.id)
 
     @classmethod
     def from_client_secret(cls, maybe_secret):

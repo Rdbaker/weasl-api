@@ -46,7 +46,8 @@ def register_extensions(app):
 
     db.init_app(app)
     migrate.init_app(app, db)
-    CORS(app, resources={r"/end_users/*": {"origins": "js.weasl.in"}})
+    print(app.config.IFRAME_HOST)
+    CORS(app, resources={r"/end_users/*": {"origins": [app.config.IFRAME_HOST]}})
     return None
 
 

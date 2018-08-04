@@ -13,6 +13,7 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     BASE_API_HOST = 'http://localhost:5000'
+    IFRAME_HOST = 'http://localhost:9001'
     SEND_EMAILS = True
     SEND_SMS = True
 
@@ -32,6 +33,7 @@ class ProdConfig(Config):
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
     BASE_API_HOST = 'https://api.weasl.in'
+    IFRAME_HOST = 'https://js.weasl.in'
 
 
 class DevConfig(Config):

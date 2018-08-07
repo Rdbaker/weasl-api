@@ -57,10 +57,13 @@ def register_blueprints(app):
     from weasl.api.orgs import blueprint as orgs_blueprint
     from weasl.api.end_users import blueprint as end_users_blueprint
 
+    from weasl.views.landing import blueprint as landing_blueprint
+
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(users_blueprint)
     app.register_blueprint(orgs_blueprint)
     app.register_blueprint(end_users_blueprint)
+    app.register_blueprint(landing_blueprint)
     return None
 
 

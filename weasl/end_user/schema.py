@@ -11,6 +11,9 @@ class EndUserSchema(Schema):
     id = fields.UUID(dump_only=True)
     email = fields.String()
     phone_number = fields.String()
+    last_login_at = fields.DateTime()
+    created_at = fields.DateTime()
+    updated_at = fields.DateTime()
     attributes = fields.Raw()
 
     private_fields = ['email', 'phone_number']

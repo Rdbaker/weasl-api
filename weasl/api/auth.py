@@ -1,4 +1,5 @@
 """API routes for authentication."""
+from datetime import datetime as dt
 import uuid
 
 from flask import Blueprint, jsonify, request
@@ -21,6 +22,8 @@ def verify_via_sms():
         raise BadRequest(Errors.NO_TOKEN)
     sms_token = SMSToken.use(token_string)
     if sms_token:
+        current_user = sms_token.user
+        current_user.update(last_login_at=dt.utcnow())
         return jsonify({'JWT': sms_token.user.encode_auth_token().decode('utf-8')})
     else:
         raise Unauthorized(Errors.BAD_TOKEN)
@@ -35,7 +38,12 @@ def send_to_sms():
     if user is None:
         # create a new user
         org = Org.generate_new()
-        user = User.create(phone_number=phone_number, org_id=org.id)
+        user = User.create(
+            phone_number=phone_number,
+            org_id=org.id,
+            created_at=dt.utcnow(),
+            updated_at=dt.utcnow(),
+        )
     # create an SMS token and send it
     token = SMSToken.generate(user)
     token.send()
@@ -56,6 +64,8 @@ def verify_via_email():
         raise BadRequest(Errors.BAD_GUID)
     email_token = EmailToken.use(uuid_token)
     if email_token:
+        current_user = sms_token.user
+        current_user.update(last_login_at=dt.utcnow())
         return jsonify({'JWT': email_token.user.encode_auth_token().decode('utf-8')})
     else:
         raise Unauthorized(Errors.BAD_TOKEN)
@@ -70,7 +80,12 @@ def send_to_email():
     if user is None:
         # create a new user
         org = Org.generate_new()
-        user = User.create(email=email, org_id=org.id)
+        user = User.create(
+            email=email,
+            org_id=org.id,
+            created_at=dt.utcnow(),
+            updated_at=dt.utcnow(),
+        )
     # create an email token and send it
     token = EmailToken.generate(user)
     token.send()

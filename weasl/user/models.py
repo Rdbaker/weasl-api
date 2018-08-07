@@ -156,6 +156,14 @@ class User(UUIDModel):
     email = Column(db.String(90), index=True, nullable=True, unique=True)
     phone_number = Column(db.String(50), index=True, nullable=True, unique=True)
     org_id = reference_col('orgs', nullable=False)
+    # ALL TIME ARE IN UTC
+    created_at = Column(db.DateTime(timezone=True), nullable=True,
+                        default=dt.datetime.utcnow)
+    last_login_at = Column(db.DateTime(timezone=True), nullable=True,
+                           default=dt.datetime.utcnow)
+    updated_at = Column(db.DateTime(timezone=True), nullable=True,
+                        default=dt.datetime.utcnow)
+
 
     @classmethod
     def from_token(cls, token: str):

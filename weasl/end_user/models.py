@@ -156,6 +156,13 @@ class EndUser(UUIDModel):
     email = Column(db.String(90), index=True, nullable=True)
     phone_number = Column(db.String(50), index=True, nullable=True)
     org_id = reference_col('orgs', nullable=False, index=True)
+    # ALL TIME ARE IN UTC
+    created_at = Column(db.DateTime(timezone=True), nullable=True,
+                        default=dt.datetime.utcnow)
+    last_login_at = Column(db.DateTime(timezone=True), nullable=True,
+                           default=dt.datetime.utcnow)
+    updated_at = Column(db.DateTime(timezone=True), nullable=True,
+                        default=dt.datetime.utcnow)
 
     __table_args__ = (
         UniqueConstraint('org_id', 'email', name='_email_org_uc'),

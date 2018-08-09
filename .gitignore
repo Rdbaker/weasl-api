@@ -2,3 +2,4 @@ secrets.sh
 .vscode
 *.py[cod]
 .pytest_cache
+*DS_Store

@@ -20,6 +20,7 @@ class OrgPropertyNamespaces(enum.Enum):
     GATES = 'gates'
     THEME = 'theme'
     SETTINGS = 'settings'
+    INTEGRATIONS = 'integrations'
 
 
 class OrgPropertyTypes(enum.Enum):

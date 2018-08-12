@@ -9,8 +9,9 @@ from weasl.org.models import OrgPropertyTypes
 class OrgPropertySchema(Schema):
     """A schema for an Org Property model."""
 
-    property_name = fields.Str(dump_to='name')
+    name = fields.Str(attribute='property_name')
     value = fields.Method('derive_value')
+    namespace = fields.Str(attribute='property_namespace')
 
     class Meta:
         """Meta class for org property."""
@@ -26,6 +27,8 @@ class OrgPropertySchema(Schema):
 
 class OrgSchema(Schema):
     """A schema for an Org model."""
+
+    private_fields = ['client_secret', 'id']
 
     id = fields.Int(dump_only=True)
     client_id = fields.String()

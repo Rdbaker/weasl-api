@@ -17,6 +17,7 @@ END_USER_SCHEMA = EndUserSchema()
 
 
 @blueprint.route('/me', methods=['GET'], strict_slashes=False)
+@client_id_required
 @end_user_login_required
 def get_me():
     return jsonify(data=END_USER_SCHEMA.dump(g.end_user)), 200
@@ -129,3 +130,17 @@ def send_to_email():
     token = EmailToken.generate(end_user)
     token.send()
     return jsonify({'message': 'token successfully sent'}), 200
+
+@blueprint.route('/attributes/<string:attribute_name>', methods=['POST', 'PATCH', 'PUT'])
+@end_user_login_required
+@client_id_required
+def update_attributes(attribute_name):
+    attributes = g.end_user.attributes
+    value = request.json.get('value')
+    if value is None:
+        raise BadRequest(Errors.ATTRIBUTE_VALUE_MISSING)
+    if attributes is None:
+        attributes = {}
+    attributes[attribute_name] = value
+    g.end_user.update(attributes=attributes)
+    return jsonify(data=END_USER_SCHEMA.dump(g.end_user)), 200

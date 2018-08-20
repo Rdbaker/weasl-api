@@ -17,6 +17,7 @@ class Errors(object):
     END_USER_DUPLICATE_PHONE = ('duplicate-phone', 'A user with that phone number already exists.')
     INVALID_CLIENT_ID = ('invalid-client-id', 'The client ID is invalid')
     CLIENT_ID_REQUIRED = ('client-id-required', 'A client ID is required for that action')
+    ATTRIBUTE_VALUE_MISSING = ('attributes-value-missing', 'A value is required for the attribute')
 
 class Success(object):
     """Constants for success in the form of: (code, message)."""

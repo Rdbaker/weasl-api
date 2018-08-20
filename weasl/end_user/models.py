@@ -7,6 +7,7 @@ import jwt
 import pytz
 from flask import current_app
 from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy.ext.mutable import Mutable
 from sqlalchemy.schema import UniqueConstraint
 
 from weasl.constants import Errors
@@ -147,12 +148,31 @@ class SMSToken(Model):
         self.update(sent=True)
 
 
+class MutableDict(Mutable, dict):
+    @classmethod
+    def coerce(cls, key, value):
+        if not isinstance(value, MutableDict):
+            if isinstance(value, dict):
+                return MutableDict(value)
+            return Mutable.coerce(key, value)
+        else:
+            return value
+
+    def __setitem__(self, key, value):
+        dict.__setitem__(self, key, value)
+        self.changed()
+
+    def __delitem__(self, key):
+        dict.__delitem__(self, key)
+        self.changed()
+
+
 class EndUser(UUIDModel):
     """A class for end_users in the database."""
 
     __tablename__ = 'end_users'
 
-    attributes = Column(JSONB())
+    attributes = Column(MutableDict.as_mutable(JSONB()))
     email = Column(db.String(90), index=True, nullable=True)
     phone_number = Column(db.String(50), index=True, nullable=True)
     org_id = reference_col('orgs', nullable=False, index=True)

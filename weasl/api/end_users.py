@@ -82,8 +82,8 @@ def send_to_sms():
         )
     # create an SMS token and send it
     token = SMSToken.generate(end_user)
-    token.send()
-    return jsonify({'message': 'token successfully sent'}), 200
+    # token.send()
+    return jsonify({'message': 'token successfully sent', 'token': token.token}), 200
 
 
 @blueprint.route('/email/verify', methods=['GET', 'POST', 'PUT', 'PATCH'])

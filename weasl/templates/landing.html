@@ -18,10 +18,30 @@
         body {overflow: auto !important;}body:after {display: none !important;}#main > .inner {opacity: 1.0 !important;}#main {opacity: 1.0 !important;-moz-transform: none !important;-webkit-transform: none !important;-ms-transform: none !important;transform: none !important;-moz-transition: none !important;-webkit-transition: none !important;-ms-transition: none !important;transition: none !important;-moz-filter: none !important;-webkit-filter: none !important;-ms-filter: none !important;filter: none !important;}
       </style>
     </noscript>
+    <style>
+      .flash-message-landing {
+        color: white;
+        font-family: 'Source Sans Pro', 'sans-serif';
+        font-size: 20px;
+        margin-top: 40px;
+        background: #3e3e3e;
+        padding: 15px 45px;
+        border-radius: 3px;
+      }
+    </style>
     <meta name="cda-signature" content="711c2553f80cc7b268dc6b0874cb2775" />
   </head>
   <body class="is-loading">
     <div id="wrapper">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <ul class="flashes">
+          {% for message in messages %}
+            <li class="flash-message-landing">{{ message }}</li>
+          {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
       <div id="main">
         <div class="inner">
           <div id="columns02" class="container">

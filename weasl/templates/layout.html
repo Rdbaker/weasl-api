@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <title>Weasl</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <meta name="description" content="Scale your webapp without worrying about user login" />
+    <meta property="og:site_name" content="Weasl" />
+    <meta property="og:title" content="Weasl" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://weasl.carrd.co/assets/images/card.jpg?v33574659363351" />
+    <meta property="og:description" content="Scale your webapp without worrying about user login" />
+    <meta property="og:url" content="https://www.weasl.in" />
+    <meta property="twitter:card" content="summary_large_image" />
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:900,900italic,200,200italic" rel="stylesheet" type="text/css" />
+    <meta name="cda-signature" content="711c2553f80cc7b268dc6b0874cb2775" />
+    {% block header %}
+    {% endblock %}
+  </head>
+  <body>
+    {% block body %}
+    {% endblock %}
+    {% if not debug %}
+    <!-- Start of Async Drift Code -->
+    <script>
+    "use strict";
+
+    !function() {
+      var t = window.driftt = window.drift = window.driftt || [];
+      if (!t.init) {
+        if (t.invoked) return void (window.console && console.error && console.error("Drift snippet included twice."));
+        t.invoked = !0, t.methods = [ "identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on" ], 
+        t.factory = function(e) {
+          return function() {
+            var n = Array.prototype.slice.call(arguments);
+            return n.unshift(e), t.push(n), t;
+          };
+        }, t.methods.forEach(function(e) {
+          t[e] = t.factory(e);
+        }), t.load = function(t) {
+          var e = 3e5, n = Math.ceil(new Date() / e) * e, o = document.createElement("script");
+          o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + n + "/" + t + ".js";
+          var i = document.getElementsByTagName("script")[0];
+          i.parentNode.insertBefore(o, i);
+        };
+      }
+    }();
+    drift.SNIPPET_VERSION = '0.3.1';
+    drift.load('2b7p8yk2aw3x');
+    </script>
+    <!-- End of Async Drift Code -->
+    {% endif %}
+  </body>
+</html>

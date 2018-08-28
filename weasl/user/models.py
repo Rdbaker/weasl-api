@@ -5,7 +5,7 @@ import uuid
 import boto3
 import jwt
 import pytz
-from flask import current_app
+from flask import current_app, render_template
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.schema import UniqueConstraint
 
@@ -75,7 +75,7 @@ class EmailToken(Model):
                     },
                     'Body': {
                         'Html': {
-                            'Data': 'Here is your link to log into Weasl: {}/auth/email/verify?token_string={}'.format(current_app.config.get('BASE_API_HOST'), self.token)
+                            'Data': render_template('emails/magiclink.html', magic_link_token=str(self.token))
                         }
                     }
                 }

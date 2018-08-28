@@ -36,6 +36,13 @@ def create_app(config_object=ProdConfig):
     register_shellcontext(app)
     register_commands(app)
 
+    @app.context_processor
+    def inject_debug():
+        return dict(
+            debug=app.debug,
+            base_site_host=app.config['BASE_SITE_HOST'],
+        )
+
     return app
 
 
@@ -64,12 +71,14 @@ def register_blueprints(app):
     from weasl.api.end_users import blueprint as end_users_blueprint
 
     from weasl.views.landing import blueprint as landing_blueprint
+    from weasl.views.emails import blueprint as emails_blueprint
 
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(users_blueprint)
     app.register_blueprint(orgs_blueprint)
     app.register_blueprint(end_users_blueprint)
     app.register_blueprint(landing_blueprint)
+    app.register_blueprint(emails_blueprint)
     return None
 
 

@@ -10,6 +10,8 @@ from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.ext.mutable import Mutable
 from sqlalchemy.schema import UniqueConstraint
 
+from weasl.org.models import OrgProperty
+from weasl.org.constants import OrgPropertyConstants
 from weasl.constants import Errors
 from weasl.database import (Column, Model, UUIDModel, db, reference_col,
                              relationship)
@@ -143,7 +145,10 @@ class SMSToken(Model):
             current_app.twilio_client.messages.create(
                 to=phone_number,
                 from_=current_app.config['TWILIO_FROM_NUMBER'],
-                body='Use this code to login to Weasl: {}'.format(self.token)
+                body='{}: {}'.format(
+                    OrgProperty.get_for_org_with_default(self.end_user.org_id, OrgPropertyConstants.TEXT_LOGIN_MESSAGE),
+                    self.token,
+                )
             )
         self.update(sent=True)
 

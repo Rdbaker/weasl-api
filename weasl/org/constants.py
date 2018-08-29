@@ -1,6 +1,8 @@
 from collections import namedtuple
 
+
 Constant = namedtuple('OrgPropertyConstant', ['display_name', 'property_name', 'default'])
+
 
 class OrgPropertyConstants:
     COMPANY_NAME = Constant(display_name='Company Name', property_name='company_name', default=None)

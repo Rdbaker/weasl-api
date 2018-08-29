@@ -82,7 +82,7 @@ def send_to_sms():
         )
     # create an SMS token and send it
     token = SMSToken.generate(end_user)
-    # token.send()
+    token.send()
     return jsonify({'message': 'token successfully sent', 'token': token.token}), 200
 
 

@@ -40,7 +40,7 @@ def login_via_magiclink(token):
     if email_token:
         current_user = email_token.user
         current_user.update(last_login_at=dt.utcnow())
-        response = redirect(url_for('landing.welcome'))
+        response = redirect(url_for('dashboard.index'))
         response.set_cookie('WEASL_AUTH', value=email_token.user.encode_auth_token().decode('utf-8'))
         return response
     else:

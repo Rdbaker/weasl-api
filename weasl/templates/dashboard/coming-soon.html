@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+
+{% block header %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dashboard/index.css') }}"/>
+{% endblock %}
+
+{% block body %}
+<div class="dashboard-container">
+  <div class="sidebar-nav">
+    <ul>
+      <li><a href="/dashboard">Dashboard</a></li>
+      <li class="{{ 'active' if page == 'activity' else '' }}">
+        {% if page != 'activity' %}
+        <a href="/dashboard/activity">
+        {% endif %}
+        Activity
+        {% if page != 'activity' %}
+        </a>
+        {% endif %}
+      </li>
+      <li class="{{ 'active' if page == 'users' else '' }}">
+        {% if page != 'users' %}
+        <a href="/dashboard/users">
+        {% endif %}
+        Users
+        {% if page != 'users' %}
+        </a>
+        {% endif %}
+      </li>
+      <li><a href="/dashboard/settings">Settings</a></li>
+    </ul>
+  </div>
+  <div class="window-container">
+    <div class="content-container">
+      <h1>
+        Coming Soon!
+      </h1>
+      <div>
+        <h4>We're currently working on this page, check back soon for updates!</h4>
+        <p>
+          Pretty soon, you'll be able to {{ description }} here
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -72,6 +72,7 @@ def register_blueprints(app):
 
     from weasl.views.landing import blueprint as landing_blueprint
     from weasl.views.emails import blueprint as emails_blueprint
+    from weasl.views.dashboard import blueprint as dashboard_blueprint
 
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(users_blueprint)
@@ -79,6 +80,7 @@ def register_blueprints(app):
     app.register_blueprint(end_users_blueprint)
     app.register_blueprint(landing_blueprint)
     app.register_blueprint(emails_blueprint)
+    app.register_blueprint(dashboard_blueprint)
     return None
 
 

@@ -9,6 +9,7 @@ import pytz
 from flask import current_app
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.schema import UniqueConstraint
+from sqlalchemy import and_
 
 from weasl.constants import Errors
 from weasl.database import (Column, Model, db, reference_col,
@@ -46,6 +47,37 @@ class OrgProperty(Model):
         """Get all the properties for the org."""
         return cls.query.filter(cls.org_id == org_id).all()
 
+    @classmethod
+    def find_for_org(cls, org_id, prop):
+        """Get a single prop for an org."""
+        return cls.query.filter(and_(
+            cls.org_id == org_id,
+            cls.property_name == prop.property_name
+        )).first()
+
+    @classmethod
+    def get_for_org_with_default(cls, org_id, prop):
+        """Get a single property for an org by name."""
+        inst = cls.find_for_org(org_id, prop)
+        if inst is not None:
+            return inst.property_value
+        else:
+            return prop.default
+
+    @classmethod
+    def save_prop_for_org(cls, org_id, prop, value, namespace=OrgPropertyNamespaces.NONE, prop_type=OrgPropertyTypes.STRING):
+        """Save a property for an org."""
+        inst = cls.find_for_org(org_id, prop)
+        if inst is None:
+            return cls.create(
+                org_id=org_id,
+                property_name=prop.property_name,
+                property_namespace=namespace,
+                property_value=value,
+                property_type=prop_type,
+            )
+        else:
+            return inst.update(property_value=value)
 
 class Org(IDModel):
     """A class for orgs in the database."""

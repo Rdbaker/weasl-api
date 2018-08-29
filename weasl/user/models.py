@@ -83,8 +83,6 @@ class EmailToken(Model):
         self.update(sent=True)
 
 
-
-
 class SMSToken(Model):
     """A class for SMS authentication tokens."""
 

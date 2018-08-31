@@ -79,3 +79,17 @@ pre {
 .settings-form-field {
   margin-top: 25px;
 }
+
+td {
+  white-space: nowrap;
+}
+
+.table-wrapper {
+  overflow: auto;
+}
+
+thead {
+  background: #bbb;
+  font-weight: 600;
+  border-bottom: 2px solid black;
+}

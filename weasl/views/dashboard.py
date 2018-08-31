@@ -6,6 +6,7 @@ from flask import Blueprint, render_template, request, make_response, flash, red
 from weasl.forms.settings import SettingsForm
 from weasl.user.controller import auth_via_email
 from weasl.user.models import EmailToken
+from weasl.end_user.controller import get_ordered_end_users_for_org
 from weasl.utils import login_required
 from weasl.org.models import Org, OrgProperty, OrgPropertyNamespaces
 from weasl.org.constants import OrgPropertyConstants
@@ -33,7 +34,10 @@ def activity():
 @login_required
 def users():
     """The index for the dashboard."""
-    return render_template('dashboard/coming-soon.html', page='users', description='see all users that have logged in to your website')
+    return render_template(
+        'dashboard/users.html',
+        ordered_users=get_ordered_end_users_for_org(g.current_user.org_id)
+    )
 
 
 @blueprint.route('/settings', methods=['GET', 'POST'])

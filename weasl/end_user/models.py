@@ -32,6 +32,7 @@ class EmailToken(Model):
                         default=dt.datetime.utcnow)
     active = Column(db.Boolean, default=False, index=True)
     sent = Column(db.Boolean, default=False, index=True)
+    org_id = reference_col('org', index=True)
 
     @classmethod
     def generate(cls, end_user):
@@ -104,6 +105,7 @@ class SMSToken(Model):
                         default=dt.datetime.utcnow)
     active = Column(db.Boolean, default=False, index=True)
     sent = Column(db.Boolean, default=False, index=True)
+    org_id = reference_col('org', index=True)
 
     @staticmethod
     def create_random_token():
@@ -123,7 +125,7 @@ class SMSToken(Model):
             end_user_id=end_user.id,
             active=True,
             sent=False,
-            expired_at=dt.datetime.utcnow() + dt.timedelta(hours=1)
+            expired_at=dt.datetime.utcnow() + dt.timedelta(hours=1),
         )
 
     @classmethod

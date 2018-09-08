@@ -47,7 +47,8 @@ def settings():
     if request.method == 'GET':
         form = SettingsForm(
             company_name=OrgProperty.get_for_org_with_default(g.current_user.org_id, OrgPropertyConstants.COMPANY_NAME),
-            text_login_message=OrgProperty.get_for_org_with_default(g.current_user.org_id, OrgPropertyConstants.TEXT_LOGIN_MESSAGE)
+            text_login_message=OrgProperty.get_for_org_with_default(g.current_user.org_id, OrgPropertyConstants.TEXT_LOGIN_MESSAGE),
+            email_magiclink=OrgProperty.get_for_org_with_default(g.current_user.org_id, OrgPropertyConstants.EMAIL_MAGICLINK),
         )
     else:
         form = SettingsForm(request.form)
@@ -62,6 +63,12 @@ def settings():
                 g.current_user.org_id,
                 OrgPropertyConstants.TEXT_LOGIN_MESSAGE,
                 value=form.text_login_message.data,
+                namespace=OrgPropertyNamespaces.THEME,
+            )
+            OrgProperty.save_prop_for_org(
+                g.current_user.org_id,
+                OrgPropertyConstants.EMAIL_MAGICLINK,
+                value=form.email_magiclink.data,
                 namespace=OrgPropertyNamespaces.THEME,
             )
 

@@ -2,6 +2,7 @@ from datetime import datetime as dt
 import uuid
 
 from flask import Blueprint, render_template, request, make_response, flash, redirect, url_for, g
+import pytz
 
 from weasl.forms.signup import SignupForm
 from weasl.user.controller import auth_via_email
@@ -39,7 +40,7 @@ def login_via_magiclink(token):
     email_token = EmailToken.use(uuid_token)
     if email_token:
         current_user = email_token.user
-        current_user.update(last_login_at=dt.utcnow())
+        current_user.update(last_login_at=dt.utcnow().replace(tzinfo=pytz.utc))
         response = redirect(url_for('dashboard.index'))
         response.set_cookie('WEASL_AUTH', value=email_token.user.encode_auth_token().decode('utf-8'))
         return response

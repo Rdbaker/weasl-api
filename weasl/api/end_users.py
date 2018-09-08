@@ -3,6 +3,7 @@ from datetime import datetime as dt
 import uuid
 
 from flask import Blueprint, jsonify, request, g, Response
+import pytz
 from sqlalchemy.exc import IntegrityError
 
 from weasl.errors import BadRequest, Unauthorized
@@ -56,7 +57,7 @@ def verify_via_sms():
     sms_token = SMSToken.use(token_string)
     if sms_token:
         end_user = sms_token.end_user
-        end_user.update(last_login_at=dt.utcnow())
+        end_user.update(last_login_at=dt.utcnow().replace(tzinfo=pytz.utc))
         return jsonify({'JWT': sms_token.end_user.encode_auth_token().decode('utf-8')})
     else:
         raise Unauthorized(Errors.BAD_TOKEN)
@@ -83,7 +84,7 @@ def send_to_sms():
     # create an SMS token and send it
     token = SMSToken.generate(end_user)
     token.send()
-    return jsonify({'message': 'token successfully sent', 'token': token.token}), 200
+    return jsonify({'message': 'token successfully sent'}), 200
 
 
 @blueprint.route('/email/verify', methods=['GET', 'POST', 'PUT', 'PATCH'])
@@ -102,7 +103,7 @@ def verify_via_email():
     email_token = EmailToken.use(uuid_token)
     if email_token:
         end_user = email_token.end_user
-        end_user.update(last_login_at=dt.utcnow())
+        end_user.update(last_login_at=dt.utcnow().replace(tzinfo=pytz.utc))
         return jsonify({'JWT': email_token.end_user.encode_auth_token().decode('utf-8')})
     else:
         raise Unauthorized(Errors.BAD_TOKEN)

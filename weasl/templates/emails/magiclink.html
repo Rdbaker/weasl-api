@@ -53,12 +53,12 @@
       <div class="weasl-magiclink-content-container">
         <div>
           <header>
-            <h2>Log In to Weasl</h2>
+            <h2>Log In{% if org_name %} to {{ org_name }}{% endif %}</h2>
           </header>
         </div>
         <div>
           <p>Click the satisfyingly big button below to be immediately logged in to your account!</p>
-          <a href="{{ base_site_host }}/magiclink/{{ magic_link_token }}" target="_blank" rel="noopener nofollower" class="weasl-magiclink-login-button">Log in</a>
+          <a href="{{ email_magiclink }}" target="_blank" rel="noopener nofollower" class="weasl-magiclink-login-button">Log in</a>
         </div>
       </div>
       <div class="weasl-magiclink-info-container">

@@ -75,7 +75,11 @@ class EmailToken(Model):
                     },
                     'Body': {
                         'Html': {
-                            'Data': render_template('emails/magiclink.html', magic_link_token=str(self.token))
+                            'Data': render_template(
+                                'emails/magiclink.html',
+                                org_name='Weasl',
+                                email_magiclink='{}/magiclink/{}'.format(current_app.config.get('BASE_SITE_HOST'), self.token)
+                            )
                         }
                     }
                 }

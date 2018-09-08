@@ -1,11 +1,13 @@
 import datetime as dt
 import random
 import uuid
+import urllib.parse as urlparse
+from urllib.parse import urlencode
 
 import boto3
 import jwt
 import pytz
-from flask import current_app
+from flask import current_app, render_template
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.ext.mutable import Mutable
 from sqlalchemy.schema import UniqueConstraint
@@ -32,7 +34,7 @@ class EmailToken(Model):
                         default=dt.datetime.utcnow)
     active = Column(db.Boolean, default=False, index=True)
     sent = Column(db.Boolean, default=False, index=True)
-    org_id = reference_col('org', index=True)
+    org_id = reference_col('orgs', index=True, nullable=True)
 
     @classmethod
     def generate(cls, end_user):
@@ -63,27 +65,45 @@ class EmailToken(Model):
             email_token.update(active=False)
         return email_token
 
+    def make_magiclink(self):
+        """Make the magiclink for the token, preserving the query params in the org's email."""
+        url = (OrgProperty.find_for_org(self.org_id, OrgPropertyConstants.EMAIL_MAGICLINK) or current_app.config.get('BASE_SITE_HOST'))
+        params = { 'w_token': self.token }
+
+        url_parts = list(urlparse.urlparse(url))
+        query = dict(urlparse.parse_qsl(url_parts[4]))
+        query.update(params)
+
+        url_parts[4] = urlencode(query)
+        return urlparse.urlunparse(url_parts)
+
     def send(self):
         """Send the token to the end_user."""
         if current_app.config.get('SEND_EMAILS'):
             email = self.end_user.email
             ses_client = boto3.client('ses', region_name='us-west-2')
-            ses_client.send_email(
-                Source=current_app.config['FROM_EMAIL'],
-                Destination={
-                    'ToAddresses': [email],
-                },
-                Message={
-                    'Subject': {
-                        'Data': 'Log in to your Weasl account'
+            import ipdb; ipdb.set_trace()
+            if False:
+                ses_client.send_email(
+                    Source=current_app.config['FROM_EMAIL'],
+                    Destination={
+                        'ToAddresses': [email],
                     },
-                    'Body': {
-                        'Html': {
-                            'Data': 'Here is your link to log into Weasl: {}/auth/email/verify?token_string={}'.format(current_app.config.get('BASE_API_HOST'), self.token)
+                    Message={
+                        'Subject': {
+                            'Data': 'Log in to your Weasl account'
+                        },
+                        'Body': {
+                            'Html': {
+                                'Data': render_template(
+                                    'emails/magiclink.html',
+                                    org_name=OrgProperty.find_for_org(self.org_id, OrgPropertyConstants.COMPANY_NAME),
+                                    email_magiclink='{}'.format(self.make_magiclink())
+                                )
+                            }
                         }
                     }
-                }
-            )
+                )
         self.update(sent=True)
 
 
@@ -105,7 +125,7 @@ class SMSToken(Model):
                         default=dt.datetime.utcnow)
     active = Column(db.Boolean, default=False, index=True)
     sent = Column(db.Boolean, default=False, index=True)
-    org_id = reference_col('org', index=True)
+    org_id = reference_col('orgs', index=True, nullable=True)
 
     @staticmethod
     def create_random_token():

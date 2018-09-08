@@ -3,6 +3,7 @@ from datetime import datetime as dt
 import uuid
 
 from flask import Blueprint, jsonify, request
+import pytz
 
 from weasl.constants import Errors
 from weasl.errors import BadRequest, Unauthorized
@@ -23,7 +24,7 @@ def verify_via_sms():
     sms_token = SMSToken.use(token_string)
     if sms_token:
         current_user = sms_token.user
-        current_user.update(last_login_at=dt.utcnow())
+        current_user.update(last_login_at=dt.utcnow().replace(tzinfo=pytz.utc))
         return jsonify({'JWT': sms_token.user.encode_auth_token().decode('utf-8')})
     else:
         raise Unauthorized(Errors.BAD_TOKEN)
@@ -41,8 +42,8 @@ def send_to_sms():
         user = User.create(
             phone_number=phone_number,
             org_id=org.id,
-            created_at=dt.utcnow(),
-            updated_at=dt.utcnow(),
+            created_at=dt.utcnow().replace(tzinfo=pytz.utc),
+            updated_at=dt.utcnow().replace(tzinfo=pytz.utc),
         )
     # create an SMS token and send it
     token = SMSToken.generate(user)
@@ -64,8 +65,8 @@ def verify_via_email():
         raise BadRequest(Errors.BAD_GUID)
     email_token = EmailToken.use(uuid_token)
     if email_token:
-        current_user = sms_token.user
-        current_user.update(last_login_at=dt.utcnow())
+        current_user = email_token.user
+        current_user.update(last_login_at=dt.utcnow().replace(tzinfo=pytz.utc))
         return jsonify({'JWT': email_token.user.encode_auth_token().decode('utf-8')})
     else:
         raise Unauthorized(Errors.BAD_TOKEN)
@@ -83,8 +84,8 @@ def send_to_email():
         user = User.create(
             email=email,
             org_id=org.id,
-            created_at=dt.utcnow(),
-            updated_at=dt.utcnow(),
+            created_at=dt.utcnow().replace(tzinfo=pytz.utc),
+            updated_at=dt.utcnow().replace(tzinfo=pytz.utc),
         )
     # create an email token and send it
     token = EmailToken.generate(user)

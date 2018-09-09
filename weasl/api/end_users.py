@@ -122,7 +122,7 @@ def send_to_email():
     if end_user is None:
         # create a new user
         end_user = EndUser.create(
-            phone_number=phone_number,
+            email=email,
             org_id=g.current_org.id,
             created_at=dt.utcnow(),
             updated_at=dt.utcnow(),

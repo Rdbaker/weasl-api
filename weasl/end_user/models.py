@@ -82,28 +82,27 @@ class EmailToken(Model):
         if current_app.config.get('SEND_EMAILS'):
             email = self.end_user.email
             ses_client = boto3.client('ses', region_name='us-west-2')
-            if False:
-                ses_client.send_email(
-                    Source=current_app.config['FROM_EMAIL'],
-                    Destination={
-                        'ToAddresses': [email],
+            ses_client.send_email(
+                Source=current_app.config['FROM_EMAIL'],
+                Destination={
+                    'ToAddresses': [email],
+                },
+                ConfigurationSetName='suetco',
+                Message={
+                    'Subject': {
+                        'Data': 'Log in to your Weasl account'
                     },
-                    ConfigurationSetName='suetco',
-                    Message={
-                        'Subject': {
-                            'Data': 'Log in to your Weasl account'
-                        },
-                        'Body': {
-                            'Html': {
-                                'Data': render_template(
-                                    'emails/magiclink.html',
-                                    org_name=OrgProperty.find_for_org(self.org_id, OrgPropertyConstants.COMPANY_NAME),
-                                    email_magiclink='{}'.format(self.make_magiclink())
-                                )
-                            }
+                    'Body': {
+                        'Html': {
+                            'Data': render_template(
+                                'emails/magiclink.html',
+                                org_name=OrgProperty.find_for_org(self.org_id, OrgPropertyConstants.COMPANY_NAME),
+                                email_magiclink='{}'.format(self.make_magiclink())
+                            )
                         }
                     }
-                )
+                }
+            )
         self.update(sent=True)
 
 

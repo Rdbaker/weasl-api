@@ -47,6 +47,7 @@ class EmailToken(Model):
         return cls.create(
             token=token,
             end_user_id=end_user.id,
+            org_id=end_user.org_id,
             active=True,
             sent=False,
             expired_at=dt.datetime.utcnow() + dt.timedelta(hours=12)
@@ -145,6 +146,7 @@ class SMSToken(Model):
         return cls.create(
             token=text_token,
             end_user_id=end_user.id,
+            org_id=end_user.org_id,
             active=True,
             sent=False,
             expired_at=dt.datetime.utcnow() + dt.timedelta(hours=1),

@@ -69,7 +69,7 @@ class EmailToken(Model):
     def make_magiclink(self):
         """Make the magiclink for the token, preserving the query params in the org's email."""
         custom_url = OrgProperty.find_for_org(self.org_id, OrgPropertyConstants.EMAIL_MAGICLINK)
-        url = (custom_url.property_value if current_url else current_app.config.get('BASE_SITE_HOST'))
+        url = (custom_url.property_value if custom_url else current_app.config.get('BASE_SITE_HOST'))
         params = { 'w_token': self.token }
 
         url_parts = list(urlparse.urlparse(url))

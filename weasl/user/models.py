@@ -69,6 +69,7 @@ class EmailToken(Model):
                 Destination={
                     'ToAddresses': [email],
                 },
+                ConfigurationSetName='suetco',
                 Message={
                     'Subject': {
                         'Data': 'Log in to your Weasl account'

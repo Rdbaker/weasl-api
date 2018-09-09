@@ -54,7 +54,7 @@ def verify_via_sms():
         token_string = request.json.get('token_string')
     if token_string is None:
         raise BadRequest(Errors.NO_TOKEN)
-    sms_token = SMSToken.use(token_string)
+    sms_token = SMSToken.use(token_string, g.current_org.id)
     if sms_token:
         end_user = sms_token.end_user
         end_user.update(last_login_at=dt.utcnow().replace(tzinfo=pytz.utc))
@@ -100,7 +100,7 @@ def verify_via_email():
         uuid_token = uuid.UUID(token_string)
     except:
         raise BadRequest(Errors.BAD_GUID)
-    email_token = EmailToken.use(uuid_token)
+    email_token = EmailToken.use(uuid_token, g.current_org.id)
     if email_token:
         end_user = email_token.end_user
         end_user.update(last_login_at=dt.utcnow().replace(tzinfo=pytz.utc))

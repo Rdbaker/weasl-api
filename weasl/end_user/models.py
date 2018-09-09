@@ -53,11 +53,12 @@ class EmailToken(Model):
         )
 
     @classmethod
-    def use(cls, token):
+    def use(cls, token: str, org_id: int):
         """Use the token to authenticate the end_user."""
         email_token = cls.query.filter(
             cls.token == token,
             cls.active == True,
+            cls.org_id == org_id,
             cls.expired_at > dt.datetime.utcnow().replace(tzinfo=pytz.utc),
         ).first()
 
@@ -150,11 +151,12 @@ class SMSToken(Model):
         )
 
     @classmethod
-    def use(cls, token_string: str):
+    def use(cls, token_string: str, org_id: int):
         """Use the token to authenticate the end_user."""
         sms_token = cls.query.filter(
             cls.token == token_string.lower(),
             cls.active == True,
+            cls.org_id == org_id,
             cls.expired_at > dt.datetime.utcnow().replace(tzinfo=pytz.utc),
         ).first()
         if sms_token:

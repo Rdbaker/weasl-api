@@ -67,7 +67,8 @@ class EmailToken(Model):
 
     def make_magiclink(self):
         """Make the magiclink for the token, preserving the query params in the org's email."""
-        url = (OrgProperty.find_for_org(self.org_id, OrgPropertyConstants.EMAIL_MAGICLINK) or current_app.config.get('BASE_SITE_HOST'))
+        custom_url = OrgProperty.find_for_org(self.org_id, OrgPropertyConstants.EMAIL_MAGICLINK)
+        url = (custom_url.property_value if current_url else current_app.config.get('BASE_SITE_HOST'))
         params = { 'w_token': self.token }
 
         url_parts = list(urlparse.urlparse(url))
@@ -82,6 +83,7 @@ class EmailToken(Model):
         if current_app.config.get('SEND_EMAILS'):
             email = self.end_user.email
             ses_client = boto3.client('ses', region_name='us-west-2')
+            org_name = OrgProperty.find_for_org(self.org_id, OrgPropertyConstants.COMPANY_NAME)
             ses_client.send_email(
                 Source=current_app.config['FROM_EMAIL'],
                 Destination={
@@ -90,13 +92,13 @@ class EmailToken(Model):
                 ConfigurationSetName='suetco',
                 Message={
                     'Subject': {
-                        'Data': 'Log in to your Weasl account'
+                        'Data': 'Log in to your {} account'.format(org_name.property_value if org_name else '')
                     },
                     'Body': {
                         'Html': {
                             'Data': render_template(
                                 'emails/magiclink.html',
-                                org_name=OrgProperty.find_for_org(self.org_id, OrgPropertyConstants.COMPANY_NAME),
+                                org_name=org_name.property_value if org_name else '',
                                 email_magiclink='{}'.format(self.make_magiclink())
                             )
                         }

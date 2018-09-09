@@ -82,7 +82,6 @@ class EmailToken(Model):
         if current_app.config.get('SEND_EMAILS'):
             email = self.end_user.email
             ses_client = boto3.client('ses', region_name='us-west-2')
-            import ipdb; ipdb.set_trace()
             if False:
                 ses_client.send_email(
                     Source=current_app.config['FROM_EMAIL'],

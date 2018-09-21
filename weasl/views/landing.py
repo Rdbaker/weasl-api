@@ -17,6 +17,22 @@ blueprint = Blueprint('landing', __name__)
 def index():
     """The index for the whole website."""
     form = SignupForm(request.form)
+    return render_template("landing2.html", form=form)
+
+
+@blueprint.route('/old')
+def indexold():
+    """The index for the whole website."""
+    form = SignupForm(request.form)
+    return render_template("landing.html", form=form)
+
+
+@blueprint.route('/signup-old', methods=['POST'])
+def registerold():
+    form = SignupForm(request.form)
+    if form.validate():
+        if auth_via_email(form.email.data):
+            flash('We sent you an email with a link to sign in')
     return render_template("landing.html", form=form)
 
 
@@ -26,7 +42,7 @@ def register():
     if form.validate():
         if auth_via_email(form.email.data):
             flash('We sent you an email with a link to sign in')
-    return render_template("landing.html", form=form)
+    return render_template("landing2.html", form=form)
 
 
 @blueprint.route('/magiclink/<string:token>')

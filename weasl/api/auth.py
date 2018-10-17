@@ -77,6 +77,7 @@ def send_to_email():
     email = request.json.get('email')
     if email is None:
         raise BadRequest(Errors.EMAIL_REQUIRED)
+    email = email.lower()
     user = User.query.filter(User.email == email).first()
     if user is None:
         # create a new user

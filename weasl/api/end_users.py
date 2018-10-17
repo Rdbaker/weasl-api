@@ -115,6 +115,7 @@ def send_to_email():
     email = request.json.get('email')
     if email is None:
         raise BadRequest(Errors.EMAIL_REQUIRED)
+    email = email.lower()
     end_user = EndUser.query.filter(
         EndUser.email == email,
         EndUser.org_id == g.current_org.id,

@@ -12,3 +12,4 @@ Flask-SSLify==0.1.5
 gunicorn==19.9.0
 wtforms==2.2.1
 sentry-sdk==0.4.3
+blinker==1.4

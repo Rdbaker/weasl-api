@@ -57,3 +57,7 @@ def client_id_required(f):
         g.current_org = org
         return f(*args, **kwargs)
     return decorated_function
+
+def get_request_secret_key():
+    header = request.headers.get('X-Weasl-Client-Secret')
+    return header

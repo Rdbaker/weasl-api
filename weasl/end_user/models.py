@@ -1,4 +1,5 @@
 import datetime as dt
+import enum
 import random
 import uuid
 import urllib.parse as urlparse
@@ -221,6 +222,11 @@ class EndUser(UUIDModel):
         UniqueConstraint('org_id', 'phone_number', name='_phone_org_uc'),
     )
 
+    @property
+    def properties(self):
+        """Get all the properties for the end user."""
+        return EndUserProperty.get_by_end_user(self.id)
+
     @classmethod
     def from_token(cls, token: str):
         """Get the end_user from an auth token."""
@@ -259,3 +265,46 @@ class EndUser(UUIDModel):
             )
         except Exception as e:
             return e
+
+
+class EndUserPropertyTypes(enum.Enum):
+    STRING = 'str'
+    NUMBER = 'int'
+    JSON = 'json.loads'
+    BOOLEAN = 'bool'
+
+
+class EndUserProperty(Model):
+    """A class for end user properties in the database."""
+
+    __tablename__ = 'end_user_properties'
+
+    end_user_id = reference_col('end_users', primary_key=True)
+    property_name = Column(db.String(511), primary_key=True)
+    property_value = Column(db.Text())
+    property_type = Column(db.Enum(EndUserPropertyTypes), nullable=False)
+    trusted = Column(db.Boolean, default=False)
+
+    @classmethod
+    def get_by_end_user(cls, end_user_id):
+        """Get all the properties for the end user."""
+        return cls.query.filter(cls.end_user_id == end_user_id).all()
+
+    @classmethod
+    def find_for_end_user(cls, end_user_id, prop_name):
+        """Find a specific property by name and end user id."""
+        return cls.query.filter(cls.end_user_id == end_user_id, cls.property_name == prop_name).first()
+
+    @classmethod
+    def save_prop_for_end_user(cls, end_user_id, prop, value, prop_type=EndUserPropertyTypes.STRING):
+        """Save a property for an end user."""
+        inst = cls.find_for_end_user(end_user_id, prop)
+        if inst is None:
+            return cls.create(
+                end_user_id=end_user_id,
+                property_name=prop,
+                property_value=value,
+                property_type=prop_type,
+            )
+        else:
+            return inst.update(property_value=value)

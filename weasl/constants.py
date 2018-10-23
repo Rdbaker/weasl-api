@@ -18,6 +18,8 @@ class Errors(object):
     INVALID_CLIENT_ID = ('invalid-client-id', 'The client ID is invalid')
     CLIENT_ID_REQUIRED = ('client-id-required', 'A client ID is required for that action')
     ATTRIBUTE_VALUE_MISSING = ('attributes-value-missing', 'A value is required for the attribute')
+    ATTRIBUTE_TYPE_MISSING = ('attributes-type-missing', 'A type is required for the attribute')
+    BAD_PROPERTY_TYPE = ('bad-property-type', 'Property type must be one of: STRING, NUMBER, JSON, BOOLEAN')
 
 class Success(object):
     """Constants for success in the form of: (code, message)."""

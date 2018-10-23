@@ -3,7 +3,7 @@
 from marshmallow import Schema, fields, ValidationError, validates_schema
 
 from weasl.constants import Errors
-
+from weasl.end_user.models import EndUserPropertyTypes
 
 class EndUserSchema(Schema):
     """A schema for an EndUser model."""
@@ -13,7 +13,7 @@ class EndUserSchema(Schema):
     phone_number = fields.String(load_only=True)
     identity = fields.Method('derive_identity', dump_only=True)
     activity = fields.Method('derive_activity', dump_only=True)
-    attributes = fields.Raw()
+    attributes = fields.Method('attributes_from_properties', dump_only=True)
 
     private_fields = ['identity']
 
@@ -35,6 +35,16 @@ class EndUserSchema(Schema):
             'email': end_user.email,
             'phone_number': end_user.phone_number,
         }
+
+    def attributes_from_properties(self, end_user):
+        attrs = {}
+        for prop in end_user.properties:
+            converter = eval('{}'.format(prop.property_type.value))
+            attrs[prop.property_name] = {
+                'value': converter(prop.property_value),
+                'trusted': prop.trusted,
+            }
+        return attrs
 
     @validates_schema
     def validate_end_user(self, data):

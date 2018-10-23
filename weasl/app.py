@@ -2,10 +2,12 @@
 """The app module, containing the app factory function."""
 import os
 
+import sentry_sdk
 from flask import Flask, jsonify
 from flask_cors import CORS
 from marshmallow.exceptions import ValidationError
 from flask_sslify import SSLify
+from sentry_sdk.integrations.flask import FlaskIntegration
 from twilio.rest import Client
 
 from weasl import commands
@@ -51,6 +53,10 @@ def register_extensions(app):
     if 'DYNO' in os.environ:
         SSLify(app)
 
+    sentry_sdk.init(
+        dsn=app.config['SENTRY_DSN'],
+        integrations=[FlaskIntegration()]
+    )
     db.init_app(app)
     migrate.init_app(app, db)
     CORS(

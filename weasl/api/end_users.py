@@ -7,9 +7,9 @@ import pytz
 from sqlalchemy.exc import IntegrityError
 
 from weasl.errors import BadRequest, Unauthorized
-from weasl.end_user.models import SMSToken, EmailToken, EndUser
+from weasl.end_user.models import SMSToken, EmailToken, EndUser, EndUserPropertyTypes, EndUserProperty
 from weasl.end_user.schema import EndUserSchema
-from weasl.utils import client_id_required, end_user_login_required
+from weasl.utils import client_id_required, end_user_login_required, get_request_secret_key
 from weasl.constants import Success, Errors
 
 blueprint = Blueprint('end_users', __name__, url_prefix='/end_users')
@@ -133,16 +133,35 @@ def send_to_email():
     token.send()
     return jsonify({'message': 'token successfully sent'}), 200
 
+
 @blueprint.route('/attributes/<string:attribute_name>', methods=['POST', 'PATCH', 'PUT'])
 @end_user_login_required
 @client_id_required
 def update_attributes(attribute_name):
-    attributes = g.end_user.attributes
     value = request.json.get('value')
     if value is None:
         raise BadRequest(Errors.ATTRIBUTE_VALUE_MISSING)
-    if attributes is None:
-        attributes = {}
-    attributes[attribute_name] = value
-    g.end_user.update(attributes=attributes)
+    attr_type = request.json.get('type')
+    if attr_type is None:
+        attr_type = EndUserPropertyTypes.STRING
+    try:
+        attr_type = EndUserPropertyTypes[attr_type]
+    except KeyError:
+        raise BadRequest(Errors.BAD_PROPERTY_TYPE)
+    secret_key = get_request_secret_key()
+    prop = EndUserProperty.query.get((g.end_user.id, attribute_name))
+    if prop is not None:
+        prop.update(
+            property_type = attr_type,
+            property_value = value,
+            trusted = g.current_org.client_secret == secret_key,
+        )
+    else:
+        EndUserProperty.create(
+            end_user_id = g.end_user.id,
+            property_type = attr_type,
+            property_name = attribute_name,
+            property_value = value,
+            trusted = g.current_org.client_secret == secret_key,
+        )
     return jsonify(data=END_USER_SCHEMA.dump(g.end_user)), 200

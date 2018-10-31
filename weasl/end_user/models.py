@@ -175,7 +175,7 @@ class SMSToken(Model):
                 from_=current_app.config['TWILIO_FROM_NUMBER'],
                 body='{}: {}'.format(
                     OrgProperty.get_for_org_with_default(self.end_user.org_id, OrgPropertyConstants.TEXT_LOGIN_MESSAGE),
-                    self.token,
+                    self.token.upper(),
                 )
             )
         self.update(sent=True)

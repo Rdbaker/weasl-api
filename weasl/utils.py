@@ -44,6 +44,21 @@ def end_user_login_required(f):
     return decorated_function
 
 
+def client_secret_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        auth_header = get_request_secret_key()
+        if not auth_header:
+            raise Unauthorized(Errors.CLIENT_SECRET_REQUIRED)
+        org = Org.from_client_secret(auth_header)
+        if not org:
+            raise Unauthorized(Errors.INVALID_CLIENT_SECRET)
+
+        g.current_org = org
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 def client_id_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -57,6 +72,7 @@ def client_id_required(f):
         g.current_org = org
         return f(*args, **kwargs)
     return decorated_function
+
 
 def get_request_secret_key():
     header = request.headers.get('X-Weasl-Client-Secret')

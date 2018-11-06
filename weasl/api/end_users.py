@@ -165,3 +165,38 @@ def update_attributes(attribute_name):
             trusted = g.current_org.client_secret == secret_key,
         )
     return jsonify(data=END_USER_SCHEMA.dump(g.end_user)), 200
+
+
+@blueprint.route('/<string:uid>/attributes/<string:attribute_name>', methods=['POST', 'PATCH', 'PUT'])
+@client_secret_required
+def update_attribute(uid, attribute_name):
+    end_user = EndUser.find(uid)
+    if end_user is None:
+        raise NotFound(Errors.END_USER_NOT_FOUND)
+    value = request.json.get('value')
+    if value is None:
+        raise BadRequest(Errors.ATTRIBUTE_VALUE_MISSING)
+    attr_type = request.json.get('type')
+    if attr_type is None:
+        attr_type = EndUserPropertyTypes.STRING
+    try:
+        attr_type = EndUserPropertyTypes[attr_type]
+    except KeyError:
+        raise BadRequest(Errors.BAD_PROPERTY_TYPE)
+    secret_key = get_request_secret_key()
+    prop = EndUserProperty.query.get((end_user.id, attribute_name))
+    if prop is not None:
+        prop.update(
+            property_type = attr_type,
+            property_value = value,
+            trusted = g.current_org.client_secret == secret_key,
+        )
+    else:
+        EndUserProperty.create(
+            end_user_id = end_user.id,
+            property_type = attr_type,
+            property_name = attribute_name,
+            property_value = value,
+            trusted = current_org.client_secret == secret_key,
+        )
+    return jsonify(data=END_USER_SCHEMA.dump(end_user)), 200

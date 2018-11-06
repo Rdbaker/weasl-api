@@ -92,7 +92,6 @@ class EmailToken(Model):
                 Destination={
                     'ToAddresses': [email],
                 },
-                ConfigurationSetName='suetco',
                 Message={
                     'Subject': {
                         'Data': 'Log in to your {} account'.format(org_name.property_value if org_name else '')

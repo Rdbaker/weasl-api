@@ -9,7 +9,7 @@ from sqlalchemy.exc import IntegrityError
 from weasl.errors import BadRequest, Unauthorized
 from weasl.end_user.models import SMSToken, EmailToken, EndUser, EndUserPropertyTypes, EndUserProperty
 from weasl.end_user.schema import EndUserSchema
-from weasl.utils import client_id_required, end_user_login_required, get_request_secret_key
+from weasl.utils import client_id_required, end_user_login_required, get_request_secret_key, client_secret_required
 from weasl.constants import Success, Errors
 
 blueprint = Blueprint('end_users', __name__, url_prefix='/end_users')

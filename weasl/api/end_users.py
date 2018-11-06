@@ -197,6 +197,6 @@ def update_attribute(uid, attribute_name):
             property_type = attr_type,
             property_name = attribute_name,
             property_value = value,
-            trusted = current_org.client_secret == secret_key,
+            trusted = g.current_org.client_secret == secret_key,
         )
     return jsonify(data=END_USER_SCHEMA.dump(end_user)), 200

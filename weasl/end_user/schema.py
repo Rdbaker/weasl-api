@@ -28,6 +28,7 @@ class EndUserSchema(Schema):
             'created_at': end_user.created_at,
             'updated_at': end_user.updated_at,
             'last_login_at': end_user.last_login_at,
+            'is_first_login': end_user.last_login_at is None,
         }
 
     def derive_identity(self, end_user):

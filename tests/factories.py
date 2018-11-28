@@ -7,7 +7,7 @@ from factory.alchemy import SQLAlchemyModelFactory
 
 from weasl.database import db
 from weasl.user.models import User
-from weasl.org.models import Org
+from weasl.org.models import Org, OrgProperty
 
 
 class BaseFactory(SQLAlchemyModelFactory):
@@ -38,3 +38,11 @@ class OrgFactory(BaseFactory):
         """Factory configuration."""
 
         model = Org
+
+class OrgPropFactory(BaseFactory):
+    """Org property factory."""
+
+    class Meta:
+        """Factory configuration."""
+
+        model = OrgProperty

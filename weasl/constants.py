@@ -23,6 +23,9 @@ class Errors(object):
     ATTRIBUTE_VALUE_MISSING = ('attributes-value-missing', 'A value is required for the attribute')
     ATTRIBUTE_TYPE_MISSING = ('attributes-type-missing', 'A type is required for the attribute')
     BAD_PROPERTY_TYPE = ('bad-property-type', 'Property type must be one of: STRING, NUMBER, JSON, BOOLEAN')
+    UNRECOGNIZED_PROPERTY = ('unrecognized-property', 'Property name is not recognized')
+    BAD_NAMESPACE = ('bad-namespace', 'Namespace must be one of: NONE, GATES, THEME, SETTINGS, or INTEGRATIONS')
+    NOT_ADMIN = ('not-admin', 'You need to be an admin to do that')
 
 class Success(object):
     """Constants for success in the form of: (code, message)."""

@@ -211,8 +211,7 @@ class EndUser(UUIDModel):
     # ALL TIME ARE IN UTC
     created_at = Column(db.DateTime(timezone=True), nullable=True,
                         default=dt.datetime.utcnow)
-    last_login_at = Column(db.DateTime(timezone=True), nullable=True,
-                           default=dt.datetime.utcnow)
+    last_login_at = Column(db.DateTime(timezone=True), nullable=True)
     updated_at = Column(db.DateTime(timezone=True), nullable=True,
                         default=dt.datetime.utcnow)
 

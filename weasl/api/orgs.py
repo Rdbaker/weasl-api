@@ -31,7 +31,7 @@ def get_my_org():
 
 @blueprint.route('/theme/<string:property_name>', methods=['PUT', 'POST', 'PATCH'])
 @login_required
-def update_property(property_name: str):
+def update_theme(property_name: str):
     value = request.json.get('value')
     if value is None:
         raise BadRequest(Errors.ATTRIBUTE_VALUE_MISSING)
@@ -59,7 +59,7 @@ def update_property(property_name: str):
 
 @blueprint.route('<int:org_id>/gates/<string:gate_name>', methods=['PUT', 'POST', 'PATCH'])
 @login_required
-def update_property(gate_name: str):
+def update_gate(gate_name: str):
     if not g.current_user.is_admin:
         raise Forbidden(Errors.NOT_ADMIN)
 

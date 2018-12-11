@@ -5,6 +5,16 @@ from marshmallow import Schema, fields, ValidationError, validates_schema
 from weasl.constants import Errors
 from weasl.end_user.models import EndUserPropertyTypes
 
+class SMSTokenSchema(Schema):
+    """A schema for an EndUserSMSToken model."""
+
+    end_user = fields.Nested('EndUserSchema')
+    sent = fields.Boolean(dump_only=True)
+    created_at = fields.DateTime(dump_only=True)
+    expired_at = fields.DateTime(dump_only=True)
+    active = fields.Boolean()
+
+
 class EndUserSchema(Schema):
     """A schema for an EndUser model."""
 
@@ -28,7 +38,6 @@ class EndUserSchema(Schema):
             'created_at': end_user.created_at,
             'updated_at': end_user.updated_at,
             'last_login_at': end_user.last_login_at,
-            'is_first_login': end_user.last_login_at is None,
         }
 
     def derive_identity(self, end_user):

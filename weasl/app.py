@@ -62,6 +62,7 @@ def register_extensions(app):
     CORS(
         app,
         resources={
+            r"*": {"origins": [app.config['APP_SPA_HOST']]},
             r"/end_users/*": {"origins": [app.config['IFRAME_HOST']]},
             "/orgs/public": {"origins": [app.config['IFRAME_HOST']]},
         }

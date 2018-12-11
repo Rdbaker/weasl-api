@@ -18,7 +18,7 @@ def get_me():
 
 
 @blueprint.route('/<string:uid>/login-token', methods=['GET'])
-# @admin_required
+@admin_required
 def get_login_token(uid: str) -> str:
     user = User.find(uid)
     if user is None:

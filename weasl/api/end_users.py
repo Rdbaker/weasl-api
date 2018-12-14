@@ -8,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 
 from weasl.errors import BadRequest, Unauthorized
 from weasl.end_user.models import SMSToken, EmailToken, EndUser, EndUserPropertyTypes, EndUserProperty
-from weasl.end_user.schema import EndUserSchema, SMSTokenSchema
+from weasl.end_user.schema import EndUserSchema, SMSTokenSchema, EmailTokenSchema
 from weasl.utils import client_id_required, end_user_login_required, get_request_secret_key, client_secret_required, login_required, friendly_arg_get
 from weasl.constants import Success, Errors
 
@@ -16,6 +16,7 @@ blueprint = Blueprint('end_users', __name__, url_prefix='/end_users')
 
 END_USER_SCHEMA = EndUserSchema()
 SMS_TOKEN_SCHEMA = SMSTokenSchema()
+EMAIL_TOKEN_SCHEMA = EmailTokenSchema()
 
 
 @blueprint.route('/me', methods=['GET'], strict_slashes=False)
@@ -23,6 +24,37 @@ SMS_TOKEN_SCHEMA = SMSTokenSchema()
 @end_user_login_required
 def get_me():
     return jsonify(data=END_USER_SCHEMA.dump(g.end_user)), 200
+
+
+@blueprint.route('/email-logins', methods=['GET'], strict_slashes=False)
+@login_required
+def list_end_user_email_logins():
+    page_num = friendly_arg_get('page', 1, int)
+    per_page = friendly_arg_get('per_page', 10, int)
+
+    # TODO: allow ordering
+    page = EmailToken.query.filter(EmailToken.org_id==g.current_user.org_id).paginate(page=page_num, per_page=per_page)
+
+    meta_pagination = {
+        'first': request.path + '?page={page}&per_page={per_page}'.format(
+            page=1, per_page=page.per_page),
+        'next': request.path + '?page={page}&per_page={per_page}'.format(
+            page=page.next_num, per_page=page.per_page),
+        'last': request.path + '?page={page}&per_page={per_page}'.format(
+            page=page.pages or 1, per_page=page.per_page),
+        'prev': request.path + '?page={page}&per_page={per_page}'.format(
+            page=page.prev_num, per_page=page.per_page),
+        'total': page.pages
+    }
+
+    if not page.has_next:
+        meta_pagination.pop('next')
+    if not page.has_prev:
+        meta_pagination.pop('prev')
+
+    return jsonify(data=EMAIL_TOKEN_SCHEMA.dump(page.items, many=True),
+                   meta={'pagination': meta_pagination})
+
 
 
 @blueprint.route('/sms-logins', methods=['GET'], strict_slashes=False)

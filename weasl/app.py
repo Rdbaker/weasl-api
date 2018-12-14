@@ -63,8 +63,8 @@ def register_extensions(app):
         app,
         resources={
             r"*": {"origins": [app.config['APP_SPA_HOST']]},
-            r"/end_users/*": {"origins": [app.config['IFRAME_HOST']]},
-            "/orgs/public": {"origins": [app.config['IFRAME_HOST']]},
+            r"/end_users/*": {"origins": [app.config['IFRAME_HOST'], app.config['APP_SPA_HOST']]},
+            "/orgs/public": {"origins": [app.config['IFRAME_HOST'], app.config['APP_SPA_HOST']]},
         }
     )
     return None

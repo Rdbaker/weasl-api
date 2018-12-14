@@ -15,6 +15,16 @@ class SMSTokenSchema(Schema):
     active = fields.Boolean()
 
 
+class EmailTokenSchema(Schema):
+    """A schema for an EndUserEmailToken model."""
+
+    end_user = fields.Nested('EndUserSchema')
+    sent = fields.Boolean(dump_only=True)
+    created_at = fields.DateTime(dump_only=True)
+    expired_at = fields.DateTime(dump_only=True)
+    active = fields.Boolean()
+
+
 class EndUserSchema(Schema):
     """A schema for an EndUser model."""
 

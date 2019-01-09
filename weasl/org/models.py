@@ -28,7 +28,7 @@ class OrgPropertyTypes(enum.Enum):
     STRING = 'str'
     NUMBER = 'int'
     JSON = 'json.loads'
-    BOOLEAN = 'bool'
+    BOOLEAN = 'lambda s: s == "true"'
 
 
 class OrgProperty(Model):
@@ -77,7 +77,7 @@ class OrgProperty(Model):
                 property_type=prop_type,
             )
         else:
-            return inst.update(property_value=value)
+            return inst.update(property_value=value, property_type=prop_type)
 
 class Org(IDModel):
     """A class for orgs in the database."""

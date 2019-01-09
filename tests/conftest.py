@@ -7,7 +7,7 @@ from weasl.app import create_app
 from weasl.database import db as _db
 from weasl.settings import TestConfig
 
-from .factories import UserFactory, OrgFactory
+from .factories import UserFactory, OrgFactory, EndUserFactory
 
 
 @pytest.yield_fixture(scope='function')
@@ -56,3 +56,11 @@ def user(db, org):
     user = UserFactory(org_id=org.id)
     db.session.commit()
     return user
+
+
+@pytest.fixture
+def end_user(db, org):
+    """An end user for the tests."""
+    end_user = EndUserFactory(org_id=org.id)
+    db.session.commit()
+    return end_user

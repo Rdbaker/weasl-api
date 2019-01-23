@@ -27,6 +27,8 @@ class Errors(object):
     UNRECOGNIZED_PROPERTY = ('unrecognized-property', 'Property name is not recognized')
     BAD_NAMESPACE = ('bad-namespace', 'Namespace must be one of: NONE, GATES, THEME, SETTINGS, or INTEGRATIONS')
     NOT_ADMIN = ('not-admin', 'You need to be an admin to do that')
+    GOOGLE_NOT_VERIFIED = ('google-not-verified', 'Your Google account email is not verified')
+    AUTH_PROVIDER_FAILED = ('auth-provider-failed', 'The auth provider gave a bad response')
 
 class Success(object):
     """Constants for success in the form of: (code, message)."""

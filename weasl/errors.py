@@ -49,6 +49,12 @@ class NotFound(APIException):
     status_code = 404
 
 
+class ProxyAuthenticationRequired(APIException):
+    """APIException for a 407."""
+
+    status_code = 407
+
+
 class Conflict(APIException):
     """A 409 code."""
 

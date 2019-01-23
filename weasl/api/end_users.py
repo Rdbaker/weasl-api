@@ -293,3 +293,13 @@ def update_attribute(uid, attribute_name):
             trusted = g.current_org.client_secret == secret_key,
         )
     return jsonify(data=END_USER_SCHEMA.dump(end_user)), 200
+
+
+@blueprint.route('/google/verify', methods=['POST', 'PUT', 'PATCH'])
+@client_id_required
+def verify_google_identity():
+    token = request.json.get('token')
+    if token is None:
+        raise BadRequest(Errors.NO_TOKEN)
+    end_user = EndUser.from_google_token(token, g.current_org.id)
+    return jsonify({'JWT': end_user.encode_auth_token().decode('utf-8')})

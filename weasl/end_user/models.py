@@ -5,6 +5,7 @@ import uuid
 import urllib.parse as urlparse
 from urllib.parse import urlencode
 
+import requests as req
 import boto3
 import jwt
 import pytz
@@ -18,7 +19,10 @@ from weasl.org.constants import OrgPropertyConstants
 from weasl.constants import Errors
 from weasl.database import (Column, Model, UUIDModel, db, reference_col,
                              relationship)
-from weasl.errors import Unauthorized
+from weasl.errors import Unauthorized, ProxyAuthenticationRequired, InternalServerError
+
+
+GOOGLE_USER_URL = 'https://content.googleapis.com/oauth2/v2/userinfo'
 
 
 class EmailToken(Model):
@@ -207,6 +211,7 @@ class EndUser(UUIDModel):
     attributes = Column(MutableDict.as_mutable(JSONB()))
     email = Column(db.String(90), index=True, nullable=True)
     phone_number = Column(db.String(50), index=True, nullable=True)
+    google_id = Column(db.String(90), index=True, nullable=True)
     org_id = reference_col('orgs', nullable=False, index=True)
     # ALL TIME ARE IN UTC
     created_at = Column(db.DateTime(timezone=True), nullable=True,
@@ -224,6 +229,35 @@ class EndUser(UUIDModel):
     def properties(self):
         """Get all the properties for the end user."""
         return EndUserProperty.get_by_end_user(self.id)
+
+    @classmethod
+    def from_google_token(cls, token: str, org_id: int):
+        """Get the user from the google email via an OAuth2 token."""
+        res = req.get(GOOGLE_USER_URL, headers={'Authorization': 'Bearer {}'.format(token)})
+        if res.status_code != 200:
+            raise InternalServerError(Errors.AUTH_PROVIDER_FAILED)
+        userinfo = res.json()
+        verified_email = userinfo.get('verified_email')
+        if not verified_email:
+            raise ProxyAuthenticationRequired(Errors.GOOGLE_NOT_VERIFIED)
+        google_id = userinfo.get('id')
+        email = userinfo.get('email')
+        end_user = EndUser.query.filter(
+            EndUser.email == email,
+            EndUser.org_id == org_id,
+        ).first()
+        if end_user is None:
+            # create a new user
+            end_user = EndUser.create(
+                google_id=google_id,
+                org_id=org_id,
+                email=email,
+                created_at=dt.utcnow(),
+                updated_at=dt.utcnow(),
+            )
+        else:
+            end_user.update(google_id=google_id)
+        return end_user
 
     @classmethod
     def from_token(cls, token: str):

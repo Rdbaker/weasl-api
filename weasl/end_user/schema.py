@@ -54,6 +54,7 @@ class EndUserSchema(Schema):
         return {
             'email': end_user.email,
             'phone_number': end_user.phone_number,
+            'google_id': end_user.google_id,
         }
 
     def attributes_from_properties(self, end_user):

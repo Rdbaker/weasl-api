@@ -4,6 +4,7 @@ import uuid
 
 from flask import Blueprint, jsonify, request
 import pytz
+from validate_email import validate_email
 
 from weasl.constants import Errors
 from weasl.errors import BadRequest, Unauthorized
@@ -77,6 +78,8 @@ def send_to_email():
     email = request.json.get('email')
     if email is None:
         raise BadRequest(Errors.EMAIL_REQUIRED)
+    if not validate_email(email):
+        raise BadRequest(Errors.INVALID_EMAIL)
     email = email.lower()
     user = User.query.filter(User.email == email).first()
     if user is None:

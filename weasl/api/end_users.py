@@ -5,6 +5,7 @@ import uuid
 from flask import Blueprint, jsonify, request, g, Response
 import pytz
 from sqlalchemy.exc import IntegrityError
+from validate_email import validate_email
 
 from weasl.errors import BadRequest, Unauthorized
 from weasl.end_user.models import SMSToken, EmailToken, EndUser, EndUserPropertyTypes, EndUserProperty
@@ -208,6 +209,8 @@ def send_to_email():
     email = request.json.get('email')
     if email is None:
         raise BadRequest(Errors.EMAIL_REQUIRED)
+    if not validate_email(email):
+        raise BadRequest(Errors.INVALID_EMAIL)
     email = email.lower()
     end_user = EndUser.query.filter(
         EndUser.email == email,

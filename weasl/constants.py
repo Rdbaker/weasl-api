@@ -29,6 +29,7 @@ class Errors(object):
     NOT_ADMIN = ('not-admin', 'You need to be an admin to do that')
     GOOGLE_NOT_VERIFIED = ('google-not-verified', 'Your Google account email is not verified')
     AUTH_PROVIDER_FAILED = ('auth-provider-failed', 'The auth provider gave a bad response')
+    INVALID_EMAIL = ('invalid-email', 'That email is invalid')
 
 class Success(object):
     """Constants for success in the form of: (code, message)."""

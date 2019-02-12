@@ -10,6 +10,7 @@ class UserSchema(Schema):
     is_admin = fields.Boolean(dump_only=True)
     email = fields.String()
     phone_number = fields.String()
+    org_id = fields.Int()
 
     private_fields = ['email', 'phone_number']
 

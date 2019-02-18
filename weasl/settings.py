@@ -28,6 +28,11 @@ class Config(object):
     FROM_EMAIL = os.environ.get('FROM_EMAIL', 'noreply@weasl.in')
     SENTRY_DSN = None
 
+    # Weasl on Weasl
+    WEASL_ON_WEASL_CLIENT_ID = 'cb4ebc07cd'
+    WEASL_ON_WEASL_SHIM_URL = 'http://lcl.weasl.in:9000/shim.js'
+    WEASL_ON_WEASL_POST_SIGNUP_URL = 'http://lcl.weasl.in:3000/verify'
+
 
 class ProdConfig(Config):
     """Production configuration."""
@@ -40,6 +45,11 @@ class ProdConfig(Config):
     IFRAME_HOST = 'https://js.weasl.in'
     APP_SPA_HOST = 'https://app.weasl.in'
     SENTRY_DSN = "https://0c92cd469e204a9aa849f7bc4d3cb4ce@sentry.io/1306071"
+
+    # Weasl on Weasl
+    WEASL_ON_WEASL_CLIENT_ID = '9a63c7237a'
+    WEASL_ON_WEASL_SHIM_URL = 'https://js.weasl.in/embed/shim.js'
+    WEASL_ON_WEASL_POST_SIGNUP_URL = 'https://app.weasl.in/verify'
 
 
 class DevConfig(Config):

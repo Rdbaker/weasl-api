@@ -3,6 +3,7 @@ from datetime import datetime as dt
 
 from flask import Blueprint, jsonify, request, g, Response
 import pytz
+import uuid
 from validate_email import validate_email
 
 from weasl.errors import BadRequest, Unauthorized

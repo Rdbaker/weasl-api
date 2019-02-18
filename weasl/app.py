@@ -43,6 +43,9 @@ def create_app(config_object=ProdConfig):
         return dict(
             debug=app.debug,
             base_site_host=app.config['BASE_SITE_HOST'],
+            weasl_on_weasl_client_id=app.config['WEASL_ON_WEASL_CLIENT_ID'],
+            weasl_on_weasl_shim_url=app.config['WEASL_ON_WEASL_SHIM_URL'],
+            post_signup_url=app.config['WEASL_ON_WEASL_POST_SIGNUP_URL'],
         )
 
     return app

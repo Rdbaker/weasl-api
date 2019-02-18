@@ -30,30 +30,7 @@
                         <div class="hero-copy">
                             <h1 class="hero-title h2-mobile mt-0 is-revealing">Plug &amp; Play User Login</h1>
                             <p class="hero-paragraph is-revealing">Add user login to your website in 3 steps.</p>
-                            {% with messages = get_flashed_messages() %}
-                              {% if messages %}
-                                <ul class="flashes">
-                                {% for message in messages %}
-                                  <li class="flash-message-landing" style="list-style:none;color:green;">{{ message }}</li>
-                                {% endfor %}
-                                </ul>
-                              {% endif %}
-                            {% endwith %}
-                            <form method="POST" action="/signup" class="hero-cta is-revealing">
-                              <div class="signup-form-email-input" style="display:inline-block;">
-                                {{form.email}}
-                              </div>
-                              <input class="button button-primary button-shadow" style="display:inline-block;" type="submit" value="Get Started">
-                              <div class="signup-form-email-errors">
-                                {% if form.email.errors %}
-                                  <ul class="errors">
-                                  {% for error in form.email.errors %}
-                                    <li>{{ error }}</li>
-                                  {% endfor %}
-                                  </ul>
-                                {% endif %}
-                              </div>
-                            </form>
+                            <input class="button button-primary button-shadow" style="display:inline-block;" type="submit" value="Get Started" onclick="weasl.signup().then(() => window.location = '{{ post_signup_url }}');">
                             <p><a href="https://rdbaker.github.io/weasl-example/" target="_blank">See an example in action</a></p>
                         </div>
                         <div class="hero-illustration is-revealing">
@@ -172,8 +149,8 @@
                                         </svg>
 
                                     </div>
-                                    <h4 class="feature-title h3-mobile">Manage your users</h4>
-                                    <p class="text-sm">All your data is yours. Forever. Add custom attributes to your users to manage things like permissions, paid plan levels, and custom features.</p>
+                                    <h4 class="feature-title h3-mobile">Engage your users</h4>
+                                    <p class="text-sm">Users have shown to be more likely to register when presented with the Weasl experience. Install Weasl on your site and increase your signup conversion.</p>
                                 </div>
                             </div>
                             <div class="feature is-revealing">
@@ -437,5 +414,18 @@
     <!-- End of Async Drift Code -->
     {% endif %}
 
+    <script>
+        (function(window, document) {
+        if (window.weasl) console.error('Weasl embed already included');
+        window.weasl = {}, m = ['init', 'login', 'signup', 'setAttribute', 'getCurrentUser', 'logout', 'debug']; window.weasl._c = [];
+        m.forEach(me => window.weasl[me] = function() {window.weasl._c.push([me, arguments])});
+        var elt = document.createElement('script');
+        elt.type = "text/javascript"; elt.async = true;
+        elt.src = "{{ weasl_on_weasl_shim_url }}";
+        var before = document.getElementsByTagName('script')[0];
+        before.parentNode.insertBefore(elt, before);
+        })(window, document, undefined);
+        weasl.init('{{ weasl_on_weasl_client_id }}');
+    </script>
 </body>
 </html>

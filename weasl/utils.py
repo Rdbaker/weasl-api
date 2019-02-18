@@ -2,7 +2,7 @@ from flask import g, request, make_response, current_app
 from functools import wraps, update_wrapper
 
 from weasl.constants import Errors
-from weasl.errors import Unauthorized, Forbidden
+from weasl.errors import Unauthorized, Forbidden, BadRequest
 from weasl.user.models import User
 from weasl.end_user.models import EndUser
 from weasl.org.models import Org
@@ -68,6 +68,24 @@ def end_user_login_required(f):
         end_user = EndUser.from_token(token)
         if not end_user:
             raise Unauthorized(Errors.LOGIN_REQUIRED)
+
+        g.end_user = end_user
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+def end_user_as_weasl_user_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        auth_header = request.headers.get('Authorization')
+        if not auth_header:
+            raise Unauthorized(Errors.LOGIN_REQUIRED)
+        token = auth_header[7:]
+        end_user = EndUser.from_token(token)
+        if not end_user:
+            raise Unauthorized(Errors.LOGIN_REQUIRED)
+        # if end_user.org_id != 1:
+        #     raise BadRequest(Errors.NOT_USER)
 
         g.end_user = end_user
         return f(*args, **kwargs)

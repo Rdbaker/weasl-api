@@ -14,7 +14,7 @@ from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.ext.mutable import Mutable
 from sqlalchemy.schema import UniqueConstraint
 
-from weasl.org.models import OrgProperty
+from weasl.org.models import OrgProperty, Org
 from weasl.org.constants import OrgPropertyConstants
 from weasl.constants import Errors
 from weasl.database import (Column, Model, UUIDModel, db, reference_col,
@@ -298,6 +298,14 @@ class EndUser(UUIDModel):
         except Exception as e:
             return e
 
+    def org_for_admin(self) -> int:
+        """Gets the org_id for which this user is the admin, since Weasl now runs on Weasl."""
+        try:
+            prop = next(filter(lambda eu_prop: eu_prop.property_name == 'org_id_as_admin' and eu_prop.trusted, self.properties))
+            return Org.find(prop.property_value)
+        except StopIteration as exc:
+            return None
+
 
 class EndUserPropertyTypes(enum.Enum):
     STRING = 'str'
@@ -328,7 +336,7 @@ class EndUserProperty(Model):
         return cls.query.filter(cls.end_user_id == end_user_id, cls.property_name == prop_name).first()
 
     @classmethod
-    def save_prop_for_end_user(cls, end_user_id, prop, value, prop_type=EndUserPropertyTypes.STRING):
+    def save_prop_for_end_user(cls, end_user_id, prop, value, prop_type=EndUserPropertyTypes.STRING, trusted=False):
         """Save a property for an end user."""
         inst = cls.find_for_end_user(end_user_id, prop)
         if inst is None:
@@ -337,6 +345,7 @@ class EndUserProperty(Model):
                 property_name=prop,
                 property_value=value,
                 property_type=prop_type,
+                trusted=trusted,
             )
         else:
             return inst.update(property_value=value)

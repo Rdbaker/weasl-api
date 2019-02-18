@@ -6,7 +6,7 @@ from flask import Blueprint, jsonify, request, g
 from weasl.errors import BadRequest, Unauthorized
 from weasl.end_user.models import SMSToken, EmailToken, EndUser, EndUserPropertyTypes, EndUserProperty
 from weasl.end_user.schema import EndUserSchema, SMSTokenSchema, EmailTokenSchema
-from weasl.utils import get_request_secret_key, client_secret_required, login_required, friendly_arg_get
+from weasl.utils import get_request_secret_key, client_secret_required, friendly_arg_get, end_user_as_weasl_user_required
 from weasl.constants import Errors
 
 blueprint = Blueprint('end_users', __name__, url_prefix='/end_users')
@@ -17,13 +17,14 @@ EMAIL_TOKEN_SCHEMA = EmailTokenSchema()
 
 
 @blueprint.route('/email-logins', methods=['GET'], strict_slashes=False)
-@login_required
+@end_user_as_weasl_user_required
 def list_end_user_email_logins():
     page_num = friendly_arg_get('page', 1, int)
     per_page = friendly_arg_get('per_page', 10, int)
 
     # TODO: allow ordering
-    page = EmailToken.query.filter(EmailToken.org_id==g.current_user.org_id).paginate(page=page_num, per_page=per_page)
+    org = g.end_user.org_for_admin()
+    page = EmailToken.query.filter(EmailToken.org_id==org.id).paginate(page=page_num, per_page=per_page)
 
     meta_pagination = {
         'first': request.path + '?page={page}&per_page={per_page}'.format(
@@ -48,13 +49,14 @@ def list_end_user_email_logins():
 
 
 @blueprint.route('/sms-logins', methods=['GET'], strict_slashes=False)
-@login_required
+@end_user_as_weasl_user_required
 def list_end_user_sms_logins():
     page_num = friendly_arg_get('page', 1, int)
     per_page = friendly_arg_get('per_page', 10, int)
 
     # TODO: allow ordering
-    page = SMSToken.query.filter(SMSToken.org_id==g.current_user.org_id).paginate(page=page_num, per_page=per_page)
+    org = g.end_user.org_for_admin()
+    page = SMSToken.query.filter(SMSToken.org_id==org.id).paginate(page=page_num, per_page=per_page)
 
     meta_pagination = {
         'first': request.path + '?page={page}&per_page={per_page}'.format(
@@ -78,13 +80,14 @@ def list_end_user_sms_logins():
 
 
 @blueprint.route('', methods=['GET'], strict_slashes=False)
-@login_required
+@end_user_as_weasl_user_required
 def list_my_end_users():
     page_num = friendly_arg_get('page', 1, int)
     per_page = friendly_arg_get('per_page', 10, int)
 
     # TODO: allow ordering
-    page = EndUser.query.filter(EndUser.org_id==g.current_user.org_id).paginate(page=page_num, per_page=per_page)
+    org = g.end_user.org_for_admin()
+    page = EndUser.query.filter(EndUser.org_id==org.id).paginate(page=page_num, per_page=per_page)
 
     meta_pagination = {
         'first': request.path + '?page={page}&per_page={per_page}'.format(

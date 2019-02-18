@@ -89,9 +89,9 @@ def update_integration(property_name: str):
 
 
 @blueprint.route('<int:org_id>/gates/<string:gate_name>', methods=['PUT', 'POST', 'PATCH'])
-@login_required
+@end_user_as_weasl_user_required
 def update_gate(org_id: int, gate_name: str):
-    if not g.current_user.is_admin:
+    if not g.end_user.is_weasl_master_admin():
         raise Forbidden(Errors.NOT_ADMIN)
 
     value = request.json.get('value')

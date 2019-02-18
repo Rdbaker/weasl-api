@@ -306,6 +306,16 @@ class EndUser(UUIDModel):
         except StopIteration as exc:
             return None
 
+    def is_weasl_master_admin(self) -> bool:
+        """Checks to see if the user is an admin of weasl overall."""
+        try:
+            prop = next(filter(lambda eu_prop: eu_prop.property_name == 'is_weasl_admin' and eu_prop.trusted, self.properties))
+            converter = eval('{}'.format(prop.property_type.value))
+            return converter(prop.property_value)
+        except StopIteration as exc:
+            return False
+
+
 
 class EndUserPropertyTypes(enum.Enum):
     STRING = 'str'

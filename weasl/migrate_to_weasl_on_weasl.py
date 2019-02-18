@@ -2,7 +2,7 @@ from weasl.end_user.models import EndUser, EndUserPropertyTypes, EndUserProperty
 from weasl.user.models import User
 
 users=User.query.all()
-master_org_id = 3
+master_org_id = 1
 
 def create_new_end_user(user):
     try:

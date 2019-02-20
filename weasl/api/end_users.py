@@ -6,7 +6,7 @@ from flask import Blueprint, jsonify, request, g
 from weasl.errors import BadRequest, Unauthorized
 from weasl.end_user.models import SMSToken, EmailToken, EndUser, EndUserPropertyTypes, EndUserProperty
 from weasl.end_user.schema import EndUserSchema, SMSTokenSchema, EmailTokenSchema
-from weasl.utils import get_request_secret_key, client_secret_required, friendly_arg_get, end_user_as_weasl_user_required
+from weasl.utils import get_request_secret_key, client_secret_required, client_id_required, friendly_arg_get, end_user_as_weasl_user_required, end_user_login_required
 from weasl.constants import Errors
 
 blueprint = Blueprint('end_users', __name__, url_prefix='/end_users')
@@ -14,6 +14,13 @@ blueprint = Blueprint('end_users', __name__, url_prefix='/end_users')
 END_USER_SCHEMA = EndUserSchema()
 SMS_TOKEN_SCHEMA = SMSTokenSchema()
 EMAIL_TOKEN_SCHEMA = EmailTokenSchema()
+
+
+@blueprint.route('/me', methods=['GET'], strict_slashes=False)
+@client_id_required
+@end_user_login_required
+def get_me():
+    return jsonify(data=END_USER_SCHEMA.dump(g.end_user)), 200
 
 
 @blueprint.route('/email-logins', methods=['GET'], strict_slashes=False)

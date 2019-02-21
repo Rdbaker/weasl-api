@@ -72,3 +72,13 @@ def welcome():
     # TODO: make this the "home" route
     org = Org.find(g.current_user.org_id)
     return render_template("welcome.html", client_id=org.client_id)
+
+
+@blueprint.route('/privacy-policy')
+def privacy_policy():
+    return render_template("privacy.html")
+
+
+@blueprint.route('/terms-of-service')
+def tos():
+    return render_template("tos.html")

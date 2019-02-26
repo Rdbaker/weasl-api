@@ -252,8 +252,8 @@ class EndUser(UUIDModel):
                 google_id=google_id,
                 org_id=org_id,
                 email=email,
-                created_at=dt.utcnow(),
-                updated_at=dt.utcnow(),
+                created_at=dt.datetime.utcnow(),
+                updated_at=dt.datetime.utcnow(),
             )
         else:
             end_user.update(google_id=google_id)

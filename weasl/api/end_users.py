@@ -2,12 +2,14 @@
 from datetime import datetime as dt
 
 from flask import Blueprint, jsonify, request, g
+import sqlalchemy as sa
 
 from weasl.errors import BadRequest, Unauthorized
 from weasl.end_user.models import SMSToken, EmailToken, EndUser, EndUserPropertyTypes, EndUserProperty
 from weasl.end_user.schema import EndUserSchema, SMSTokenSchema, EmailTokenSchema
 from weasl.utils import get_request_secret_key, client_secret_required, client_id_required, friendly_arg_get, end_user_as_weasl_user_required, end_user_login_required
 from weasl.constants import Errors
+from weasl.database import db
 
 blueprint = Blueprint('end_users', __name__, url_prefix='/end_users')
 
@@ -150,3 +152,24 @@ def update_attribute(uid, attribute_name):
             trusted = g.current_org.client_secret == secret_key,
         )
     return jsonify(data=END_USER_SCHEMA.dump(end_user)), 200
+
+
+@blueprint.route('/aggregate/logins', methods=['GET'])
+@end_user_as_weasl_user_required
+def get_aggregate_logins():
+    """Get the logins aggregated by date for the account."""
+    org = g.end_user.org_for_admin()
+
+    sms_logins = SMSToken.query.session\
+        .query(sa.func.count(SMSToken.token), sa.func.date(SMSToken.created_at))\
+        .group_by(sa.func.date(SMSToken.created_at))\
+        .filter(SMSToken.org_id==org.id)\
+        .all()
+
+    email_logins = EmailToken.query.session\
+        .query(sa.func.count(EmailToken.token), sa.func.date(EmailToken.created_at))\
+        .group_by(sa.func.date(EmailToken.created_at))\
+        .filter(EmailToken.org_id==org.id)\
+        .all()
+
+    return jsonify(data={'sms_logins': sms_logins, 'email_logins': email_logins})

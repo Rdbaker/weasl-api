@@ -7,7 +7,7 @@ from factory.alchemy import SQLAlchemyModelFactory
 
 from weasl.database import db
 from weasl.user.models import User
-from weasl.end_user.models import EndUser
+from weasl.end_user.models import EndUser, EndUserProperty
 from weasl.org.models import Org, OrgProperty
 
 
@@ -52,6 +52,7 @@ class OrgFactory(BaseFactory):
 
         model = Org
 
+
 class OrgPropFactory(BaseFactory):
     """Org property factory."""
 
@@ -59,3 +60,12 @@ class OrgPropFactory(BaseFactory):
         """Factory configuration."""
 
         model = OrgProperty
+
+
+class EndUserPropFactory(BaseFactory):
+    """End user property factory."""
+
+    class Meta:
+        """Factory configuration."""
+
+        model = EndUserProperty

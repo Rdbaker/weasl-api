@@ -1,7 +1,8 @@
 """API routes that power the widget."""
 from datetime import datetime as dt
 
-from flask import Blueprint, jsonify, request, g, Response
+from flask import Blueprint, jsonify, request, g
+from marshmallow import EXCLUDE
 import pytz
 import uuid
 from validate_email import validate_email
@@ -15,10 +16,10 @@ from weasl.constants import Errors
 
 blueprint = Blueprint('widget', __name__, url_prefix='/widget')
 
-END_USER_SCHEMA = EndUserSchema()
-SMS_TOKEN_SCHEMA = SMSTokenSchema()
-EMAIL_TOKEN_SCHEMA = EmailTokenSchema()
-PUBLIC_ORG_SCHEMA = OrgSchema(exclude=OrgSchema.private_fields)
+END_USER_SCHEMA = EndUserSchema(unknown=EXCLUDE)
+SMS_TOKEN_SCHEMA = SMSTokenSchema(unknown=EXCLUDE)
+EMAIL_TOKEN_SCHEMA = EmailTokenSchema(unknown=EXCLUDE)
+PUBLIC_ORG_SCHEMA = OrgSchema(exclude=OrgSchema.private_fields, unknown=EXCLUDE)
 
 
 @blueprint.route('/org', methods=['GET'])
@@ -143,17 +144,17 @@ def update_attributes(attribute_name):
     prop = EndUserProperty.query.get((g.end_user.id, attribute_name))
     if prop is not None:
         prop.update(
-            property_type = attr_type,
-            property_value = value,
-            trusted = g.current_org.client_secret == secret_key,
+            property_type=attr_type,
+            property_value=value,
+            trusted=g.current_org.client_secret == secret_key,
         )
     else:
         EndUserProperty.create(
-            end_user_id = g.end_user.id,
-            property_type = attr_type,
-            property_name = attribute_name,
-            property_value = value,
-            trusted = g.current_org.client_secret == secret_key,
+            end_user_id=g.end_user.id,
+            property_type=attr_type,
+            property_name=attribute_name,
+            property_value=value,
+            trusted=g.current_org.client_secret == secret_key,
         )
     return jsonify(data=END_USER_SCHEMA.dump(g.end_user)), 200
 

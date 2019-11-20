@@ -2,8 +2,6 @@
 """Test the views at /auth/email."""
 import pytest
 
-from weasl.user.models import SMSToken, User
-
 
 @pytest.mark.usefixtures('db')
 class TestOrgThemeUpdate(object):
@@ -21,16 +19,16 @@ class TestOrgThemeUpdate(object):
         assert res.status_code == 401
 
     @pytest.mark.parametrize('method', methods)
-    def test_prop_create_bad_type(self, testapp, user, method):
+    def test_prop_create_bad_type(self, testapp, end_user_as_weasl_user, method):
         """Test that we get a 400 if we give a bad type."""
-        token = user.encode_auth_token().decode('utf-8')
+        token = end_user_as_weasl_user.encode_auth_token().decode('utf-8')
         func = getattr(testapp, method)
         res = func(self.base_url.format('company_name'), {'type': 'INVALID'}, status=400, headers={'Authorization': 'Bearer {}'.format(token)})
         assert res.status_code == 400
 
     @pytest.mark.parametrize('method', methods)
-    def test_prop_created_if_acceptable(self, testapp, user, method):
+    def test_prop_created_if_acceptable(self, testapp, end_user_as_weasl_user, method):
         """Test that we create a new org prop if it's valid."""
-        token = user.encode_auth_token().decode('utf-8')
+        token = end_user_as_weasl_user.encode_auth_token().decode('utf-8')
         func = getattr(testapp, method)
-        res = func(self.base_url.format('company_name'), {'value': 'my company name', 'type': 'STRING'}, headers={'Authorization': 'Bearer {}'.format(token)})
+        func(self.base_url.format('company_name'), {'value': 'my company name', 'type': 'STRING'}, headers={'Authorization': 'Bearer {}'.format(token)})

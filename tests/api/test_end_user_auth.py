@@ -9,9 +9,9 @@ from weasl.end_user.models import SMSToken, EndUser, EmailToken
 
 @pytest.mark.usefixtures('db')
 class TestSendSMS(object):
-    """Test PUT|POST|PATCH /end_users/email/send."""
+    """Test PUT|POST|PATCH /widget/email/send."""
 
-    base_url = '/end_users/sms/send'
+    base_url = '/widget/sms/send'
 
     methods = ['post_json', 'put_json', 'patch_json']
 
@@ -49,9 +49,9 @@ class TestSendSMS(object):
 
 @pytest.mark.usefixtures('db')
 class TestVerifySMS(object):
-    """Test PUT|POST|PATCH /end_users/sms/verify."""
+    """Test PUT|POST|PATCH /widget/sms/verify."""
 
-    base_url = '/end_users/sms/verify'
+    base_url = '/widget/sms/verify'
 
     methods = ['post_json', 'put_json', 'patch_json']
 
@@ -95,9 +95,9 @@ class TestVerifySMS(object):
 
 @pytest.mark.usefixtures('db')
 class TestSendEmail(object):
-    """Test PUT|POST|PATCH /end_users/email/send."""
+    """Test PUT|POST|PATCH /widget/email/send."""
 
-    base_url = '/end_users/email/send'
+    base_url = '/widget/email/send'
 
     methods = ['post_json', 'put_json', 'patch_json']
 
@@ -135,9 +135,9 @@ class TestSendEmail(object):
 
 @pytest.mark.usefixtures('db')
 class TestVerifyEmail(object):
-    """Test PUT|POST|PATCH /end_users/email/verify."""
+    """Test PUT|POST|PATCH /widget/email/verify."""
 
-    base_url = '/end_users/email/verify'
+    base_url = '/widget/email/verify'
 
     methods = ['post_json', 'put_json', 'patch_json']
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Org schema."""
-import json
-from marshmallow import Schema, fields, ValidationError, validate
+import json  # noqa - needed for the eval(...) call
+from marshmallow import Schema, fields, validate, EXCLUDE
 
 from weasl.org.models import OrgPropertyTypes
 
@@ -12,6 +12,7 @@ class OrgPropertySchema(Schema):
     name = fields.Str(attribute='property_name')
     value = fields.Method('derive_value')
     namespace = fields.Str(attribute='property_namespace')
+    org_id = fields.Int(dump_only=True)
 
     class Meta:
         """Meta class for org property."""

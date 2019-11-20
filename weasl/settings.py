@@ -57,7 +57,7 @@ class DevConfig(Config):
 
     ENV = 'dev'
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'postgres://weasl:weasl123@' + \
+    SQLALCHEMY_DATABASE_URI = 'postgresql://weasl:weasl123@' + \
         'localhost:5432/weasl'
 
 
@@ -68,6 +68,6 @@ class TestConfig(Config):
     DEBUG = True
     SEND_EMAILS = False
     SEND_SMS = False
-    SQLALCHEMY_DATABASE_URI = 'postgres://weasl:weasl123@' + \
+    SQLALCHEMY_DATABASE_URI = 'postgresql://weasl:weasl123@' + \
         'localhost:5432/weasl_test'
     APP_SPA_HOST = 'http://dev.weasl.in'

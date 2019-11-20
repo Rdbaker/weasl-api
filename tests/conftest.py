@@ -6,8 +6,9 @@ from webtest import TestApp
 from weasl.app import create_app
 from weasl.database import db as _db
 from weasl.settings import TestConfig
+from weasl.end_user.models import EndUserPropertyTypes
 
-from .factories import UserFactory, OrgFactory, EndUserFactory
+from .factories import UserFactory, OrgFactory, EndUserFactory, EndUserPropFactory
 
 
 @pytest.yield_fixture(scope='function')
@@ -62,5 +63,21 @@ def user(db, org):
 def end_user(db, org):
     """An end user for the tests."""
     end_user = EndUserFactory(org_id=org.id)
+    db.session.commit()
+    return end_user
+
+
+@pytest.fixture
+def end_user_as_weasl_user(db, org):
+    """An end user as a weasl user for the tests."""
+    end_user = EndUserFactory(org_id=org.id)
+    db.session.commit()
+    EndUserPropFactory(
+        end_user_id=end_user.id,
+        property_name='org_id_as_admin',
+        property_value=str(org.id),
+        property_type=EndUserPropertyTypes.NUMBER,
+        trusted=True,
+    )
     db.session.commit()
     return end_user

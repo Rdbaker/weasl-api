@@ -182,7 +182,7 @@ class User(UUIDModel):
         :return: string
         """
         try:
-            payload = jwt.decode(auth_token, current_app.config.get('SECRET_KEY'))
+            payload = jwt.decode(auth_token, current_app.config.get('SECRET_KEY'), algorithms=['HS256'])
             return payload['sub']
         except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
             raise Unauthorized(Errors.BAD_TOKEN)

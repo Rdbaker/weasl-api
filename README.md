@@ -4,13 +4,13 @@
 
 ### Prerequesites
 
- - Python 3.6
+ - Python 3.8
  - PostgreSQL 9.5
 
 ### Installation
 
 ```bash
-pip install -r requirements/dev.txt
+pipenv install
 . env.sh
 . secrets.sh
 . setup_db.sh

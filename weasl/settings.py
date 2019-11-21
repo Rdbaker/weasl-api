@@ -44,7 +44,7 @@ class ProdConfig(Config):
     BASE_SITE_HOST = 'https://www.weasl.in'
     IFRAME_HOST = 'https://js.weasl.in'
     APP_SPA_HOST = 'https://app.weasl.in'
-    SENTRY_DSN = "https://0c92cd469e204a9aa849f7bc4d3cb4ce@sentry.io/1306071"
+    SENTRY_DSN = "https://614322d7d7274774b5cc05bfd3191462@sentry.io/1828537"
 
     # Weasl on Weasl
     WEASL_ON_WEASL_CLIENT_ID = '9a63c7237a'

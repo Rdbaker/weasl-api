@@ -19,7 +19,6 @@ class Errors(object):
     CLIENT_ID_REQUIRED = ('client-id-required', 'A client ID is required for that action')
     CLIENT_SECRET_REQUIRED = ('client-secret-required', 'A client secret is required for that action')
     INVALID_CLIENT_SECRET = ('invalid-client-secret', 'The client secret is invalid')
-    USER_NOT_FOUND = ('user-not-found', 'That user does not exist')
     END_USER_NOT_FOUND = ('end-user-not-found', 'That end user does not exist')
     ATTRIBUTE_VALUE_MISSING = ('attributes-value-missing', 'A value is required for the attribute')
     ATTRIBUTE_TYPE_MISSING = ('attributes-type-missing', 'A type is required for the attribute')

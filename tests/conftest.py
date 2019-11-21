@@ -8,7 +8,7 @@ from weasl.database import db as _db
 from weasl.settings import TestConfig
 from weasl.end_user.models import EndUserPropertyTypes
 
-from .factories import UserFactory, OrgFactory, EndUserFactory, EndUserPropFactory
+from .factories import OrgFactory, EndUserFactory, EndUserPropFactory
 
 
 @pytest.yield_fixture(scope='function')
@@ -49,14 +49,6 @@ def org(db):
     org = OrgFactory()
     db.session.commit()
     return org
-
-
-@pytest.fixture
-def user(db, org):
-    """A user for the tests."""
-    user = UserFactory(org_id=org.id)
-    db.session.commit()
-    return user
 
 
 @pytest.fixture

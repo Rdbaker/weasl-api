@@ -8,7 +8,7 @@ from weasl.errors import BadRequest, Forbidden
 from weasl.org.models import Org, OrgPropertyTypes, OrgPropertyNamespaces, OrgProperty
 from weasl.org.schema import OrgSchema
 from weasl.org.constants import Constant
-from weasl.utils import login_required, client_id_required, end_user_as_weasl_user_required
+from weasl.utils import client_id_required, end_user_as_weasl_user_required
 
 blueprint = Blueprint('orgs', __name__, url_prefix='/orgs')
 

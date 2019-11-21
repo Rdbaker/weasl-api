@@ -14,7 +14,6 @@ from weasl import commands
 from weasl.errors import APIException
 from weasl.extensions import db, migrate
 from weasl.settings import ProdConfig
-from weasl.user.models import EmailToken, SMSToken, User
 from weasl.org.models import Org
 from weasl.end_user.models import EndUser
 
@@ -76,24 +75,18 @@ def register_extensions(app):
 
 def register_blueprints(app):
     """Register Flask blueprints."""
-    from weasl.api.auth import blueprint as auth_blueprint
-    from weasl.api.users import blueprint as users_blueprint
     from weasl.api.orgs import blueprint as orgs_blueprint
     from weasl.api.end_users import blueprint as end_users_blueprint
     from weasl.api.widget import blueprint as widget_blueprint
 
     from weasl.views.landing import blueprint as landing_blueprint
     from weasl.views.emails import blueprint as emails_blueprint
-    from weasl.views.dashboard import blueprint as dashboard_blueprint
 
     app.register_blueprint(widget_blueprint)
-    app.register_blueprint(auth_blueprint)
-    app.register_blueprint(users_blueprint)
     app.register_blueprint(orgs_blueprint)
     app.register_blueprint(end_users_blueprint)
     app.register_blueprint(landing_blueprint)
     app.register_blueprint(emails_blueprint)
-    app.register_blueprint(dashboard_blueprint)
     return None
 
 
